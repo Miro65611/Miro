@@ -74,10 +74,28 @@ public:
 	// Status 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Status, meta = (AllowPrivateAccess = "true"))
-	float MaxEnergy; 
+	float MaxEnergy = 100.f; 
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Status, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly, Category = Status, meta = (AllowPrivateAccess = "true"))
 	float CurrentEnergy;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Status, meta = (AllowPrivateAccess = "true"))
+	float DecreaseEnergyPerSecond = 10.f;
+	
+	UPROPERTY(ReplicatedUsing = OnRep_IsEnergyDischarged)
+	bool bIsEnergyDischarged = false; 
+
 	void BeginStatus();
+
+	void UpdateStatus(float DeltaTime);
+
+private:
+	UFUNCTION()
+	void OnRep_IsEnergyDischarged();
+
+public:
+	
+	UFUNCTION(BlueprintCallable, Category = "Status")
+	float GetCurrentEnergy()const { return CurrentEnergy; }
+	
 };

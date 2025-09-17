@@ -31,15 +31,18 @@ AMIMegaMikeCharacter::AMIMegaMikeCharacter()
 	Mesh3P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh3P"));
 	Mesh3P->SetOwnerNoSee(true);
 	Mesh3P->SetupAttachment(Capsule);
-
-
 }
-
 
 void AMIMegaMikeCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void AMIMegaMikeCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AMIMegaMikeCharacter, bIsJumping);
 }
 
 void AMIMegaMikeCharacter::Tick(float DeltaTime)
@@ -52,11 +55,6 @@ void AMIMegaMikeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void AMIMegaMikeCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(AMIMegaMikeCharacter, bIsJumping);
-}
 
 void AMIMegaMikeCharacter::OnJumped_Implementation()
 {
@@ -68,6 +66,8 @@ void AMIMegaMikeCharacter::Landed(const FHitResult& Hit)
 {
 	Super::Landed(Hit);
 	bIsJumping = false;
+
+	UE_LOG(LogTemp, Log, TEXT("Landed"));
 }
 
 

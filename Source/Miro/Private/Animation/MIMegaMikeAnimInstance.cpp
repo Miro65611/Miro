@@ -15,7 +15,6 @@ void UMIMegaMikeAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		if (AMIMegaMikeCharacter* Character = Cast<AMIMegaMikeCharacter>(OwningPawn))
 		{
 			FVector Velocity = Character->GetVelocity();
-
 			FVector Foward = Character->GetActorForwardVector();
 			FVector Right = Character->GetActorRightVector();
 			float MaxSpeed = Character->GetMaxDashSpeed();

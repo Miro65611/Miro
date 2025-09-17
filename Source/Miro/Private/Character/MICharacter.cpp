@@ -7,7 +7,7 @@
 #include "InputActionValue.h"
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/CharacterMovementComponent.h"
-
+#include "GameFramework/PlayerController.h"
 // Sets default values
 AMICharacter::AMICharacter()
 {
@@ -26,6 +26,8 @@ void AMICharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AMICharacter, bOnDashInput);
+	DOREPLIFETIME(AMICharacter, CurrentEnergy);
+	DOREPLIFETIME(AMICharacter, bIsEnergyDischarged);
 }
 
 void AMICharacter::BeginPlay()
@@ -41,6 +43,8 @@ void AMICharacter::Tick(float DeltaTime)
 
 	UCharacterMovementComponent* MovementComponent = GetCharacterMovement();
 	MovementComponent->MaxWalkSpeed = bOnDashInput ? MaxDashSpeed : MaxWalkSpeed;
+
+	UpdateStatus(DeltaTime);
 }
 
 
@@ -140,6 +144,45 @@ void AMICharacter::BeginStatus()
 {
 	CurrentEnergy = MaxEnergy;
 }
+
+void AMICharacter::UpdateStatus(float DeltaTime)
+{
+	if (HasAuthority())
+	{
+		float DecreaseEnergy = DecreaseEnergyPerSecond * DeltaTime;
+		CurrentEnergy = FMath::Max(CurrentEnergy - DecreaseEnergy, 0.f);
+
+		if (!bIsEnergyDischarged && CurrentEnergy <= 0.f)
+		{
+			bIsEnergyDischarged = true;
+			OnRep_IsEnergyDischarged();
+		}
+	}
+}
+
+void AMICharacter::OnRep_IsEnergyDischarged()
+{
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+
+	if (PlayerController)
+	{
+		if (bIsEnergyDischarged)
+		{
+			// 방전상태 처리
+			PlayerController->SetIgnoreMoveInput(true);
+			PlayerController->SetIgnoreLookInput(true);
+		}
+		else
+		{
+			// 살아난 상태 처리  
+			PlayerController->SetIgnoreMoveInput(false);
+			PlayerController->SetIgnoreLookInput(false);
+
+			// TODO : IutMappingContext 로 구조변경
+		}
+	}
+}
+
 
 
 
