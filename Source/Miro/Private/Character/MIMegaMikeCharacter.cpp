@@ -22,21 +22,22 @@ AMIMegaMikeCharacter::AMIMegaMikeCharacter()
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 
 	// 메쉬 설정
-	USkeletalMeshComponent* Mesh1P = GetMesh();
+	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
 	Mesh1P->SetOnlyOwnerSee(true);
 	Mesh1P->SetupAttachment(Capsule);
 	Mesh1P->bCastDynamicShadow = false;
 	Mesh1P->CastShadow = false;
 
-	Mesh3P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh3P"));
+	USkeletalMeshComponent* Mesh3P = GetMesh();
 	Mesh3P->SetOwnerNoSee(true);
 	Mesh3P->SetupAttachment(Capsule);
+
 }
 
 void AMIMegaMikeCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 void AMIMegaMikeCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -70,4 +71,40 @@ void AMIMegaMikeCharacter::Landed(const FHitResult& Hit)
 	UE_LOG(LogTemp, Log, TEXT("Landed"));
 }
 
+void AMIMegaMikeCharacter::OnRep_bIsEnergyDischarged()
+{
+	Super::OnRep_bIsEnergyDischarged();
+	USkeletalMeshComponent* Mesh3P = GetMesh();
+
+	if (IsEnergyDischarged())
+	{
+		Mesh1P->SetVisibility(false);
+
+		// 1. 충돌 설정
+		Mesh3P->SetSimulatePhysics(true);
+		Mesh3P->SetCollisionProfileName(TEXT("Ragdoll"));
+
+		//GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		SetRootComponent(Mesh3P);
+
+		// 2. 카메라 설정
+
+	}
+	else
+	{
+		Mesh1P->SetVisibility(true);
+
+		// 1. 충돌 설정
+		Mesh3P->SetSimulatePhysics(false);
+		Mesh3P->SetCollisionProfileName(TEXT("CharacterMesh"));
+		SetRootComponent(GetCapsuleComponent());
+
+
+		//GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+		// 2. 카메라 설정
+
+	}
+
+}
 

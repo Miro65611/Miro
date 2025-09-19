@@ -46,6 +46,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* InteractAction;
+
 protected:
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
@@ -62,40 +65,41 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	float MaxWalkSpeed = 200.f;
 
-	UPROPERTY(ReplicatedUsing = OnRep_SetDashInput)
+	UPROPERTY(Replicated)
 	bool bOnDashInput = false;
 
-	UFUNCTION()
-	void OnRep_SetDashInput();
+	void UpdateMaxWalkSpeed();
 
 public:
 	float GetMaxDashSpeed()const { return MaxDashSpeed; }
 
-	// Status 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Status, meta = (AllowPrivateAccess = "true"))
-	float MaxEnergy = 100.f; 
+	float MaxEnergy = 100.f;
 
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly, Category = Status, meta = (AllowPrivateAccess = "true"))
 	float CurrentEnergy;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Status, meta = (AllowPrivateAccess = "true"))
 	float DecreaseEnergyPerSecond = 10.f;
-	
-	UPROPERTY(ReplicatedUsing = OnRep_IsEnergyDischarged)
-	bool bIsEnergyDischarged = false; 
 
 	void BeginStatus();
 
 	void UpdateStatus(float DeltaTime);
 
 private:
+	UPROPERTY(ReplicatedUsing = OnRep_bIsEnergyDischarged)
+	bool bIsEnergyDischarged = false;
+
+protected:
 	UFUNCTION()
-	void OnRep_IsEnergyDischarged();
+	virtual void OnRep_bIsEnergyDischarged();
+
 
 public:
-	
+	bool IsEnergyDischarged()const { return bIsEnergyDischarged; }
+
 	UFUNCTION(BlueprintCallable, Category = "Status")
 	float GetCurrentEnergy()const { return CurrentEnergy; }
-	
+
 };

@@ -19,6 +19,7 @@ AMICharacter::AMICharacter()
 	SetReplicatingMovement(true);
 	// 서버가 항상 이 액터를 클라이언트에게 복제하도록 강제
 	bAlwaysRelevant = true;
+
 }
 
 void AMICharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -41,10 +42,18 @@ void AMICharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	UCharacterMovementComponent* MovementComponent = GetCharacterMovement();
-	MovementComponent->MaxWalkSpeed = bOnDashInput ? MaxDashSpeed : MaxWalkSpeed;
-
+	UpdateMaxWalkSpeed();
 	UpdateStatus(DeltaTime);
+
+	// Debug
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	if (PlayerController)
+	{
+		if (PlayerController->IsInputKeyDown(EKeys::P))
+		{
+			CurrentEnergy = MaxEnergy;
+		}
+	}
 }
 
 
@@ -90,7 +99,7 @@ void AMICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 void AMICharacter::Move(const FInputActionValue& Value)
 {
-	FVector2D MovementVector = Value.Get<FVector2D>();
+	const FVector2D MovementVector = Value.Get<FVector2D>();
 
 	if (Controller != nullptr)
 	{
@@ -101,7 +110,7 @@ void AMICharacter::Move(const FInputActionValue& Value)
 
 void AMICharacter::Look(const FInputActionValue& Value)
 {
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
+	const FVector2D LookAxisVector = Value.Get<FVector2D>();
 
 	if (Controller != nullptr)
 	{
@@ -120,68 +129,78 @@ void AMICharacter::OffDashInput()
 	Server_SetDashInput(false);
 }
 
+void AMICharacter::UpdateMaxWalkSpeed()
+{
+	UCharacterMovementComponent* MovementComponent = GetCharacterMovement();
+	MovementComponent->MaxWalkSpeed = bOnDashInput ? MaxDashSpeed : MaxWalkSpeed;
+}
+
 void AMICharacter::Server_SetDashInput_Implementation(bool bIsOnDashInput)
 {
 	bOnDashInput = bIsOnDashInput;
 }
 
-void AMICharacter::OnRep_SetDashInput()
-{
-	if (bOnDashInput)
-	{
-		// 대시 시작 효과 (예: 이펙트, 사운드)
-		GetCharacterMovement()->MaxWalkSpeed = MaxDashSpeed;
-	}
-	else
-	{
-		// 대시 종료 효과 (예: 이펙트 종료, 사운드)
-		GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
-	}
-
-}
-
 void AMICharacter::BeginStatus()
 {
-	CurrentEnergy = MaxEnergy;
+	if (HasAuthority())
+	{
+		CurrentEnergy = MaxEnergy;
+	}
 }
 
 void AMICharacter::UpdateStatus(float DeltaTime)
 {
 	if (HasAuthority())
 	{
-		float DecreaseEnergy = DecreaseEnergyPerSecond * DeltaTime;
+		const float DecreaseEnergy = DecreaseEnergyPerSecond * DeltaTime;
 		CurrentEnergy = FMath::Max(CurrentEnergy - DecreaseEnergy, 0.f);
 
+		// 방전상태 진입
 		if (!bIsEnergyDischarged && CurrentEnergy <= 0.f)
 		{
 			bIsEnergyDischarged = true;
-			OnRep_IsEnergyDischarged();
+			OnRep_bIsEnergyDischarged();
+		}
+
+		// 충전상태 진입
+		if (bIsEnergyDischarged && CurrentEnergy > 0.f)
+		{
+			bIsEnergyDischarged = false;
+			OnRep_bIsEnergyDischarged();
 		}
 	}
 }
 
-void AMICharacter::OnRep_IsEnergyDischarged()
+
+void AMICharacter::OnRep_bIsEnergyDischarged()
 {
 	APlayerController* PlayerController = Cast<APlayerController>(GetController());
 
-	if (PlayerController)
+	if (!IsLocallyControlled() || PlayerController == nullptr)
 	{
-		if (bIsEnergyDischarged)
-		{
-			// 방전상태 처리
-			PlayerController->SetIgnoreMoveInput(true);
-			PlayerController->SetIgnoreLookInput(true);
-		}
-		else
-		{
-			// 살아난 상태 처리  
-			PlayerController->SetIgnoreMoveInput(false);
-			PlayerController->SetIgnoreLookInput(false);
-
-			// TODO : IutMappingContext 로 구조변경
-		}
+		return;
 	}
+
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
+	if (Subsystem == nullptr)
+	{
+		return;
+	}
+
+	// 입력 바인딩 관리
+	if (bIsEnergyDischarged)
+	{
+		Subsystem->RemoveMappingContext(DefaultMappingContext);
+	}
+	else
+	{
+		Subsystem->AddMappingContext(DefaultMappingContext, 0);
+	}
+
 }
+
+
+
 
 
 

@@ -19,7 +19,7 @@ class MIRO_API AMIMegaMikeCharacter : public AMICharacter
 	
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
-	USkeletalMeshComponent* Mesh3P;
+	USkeletalMeshComponent* Mesh1P;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FirstPersonCameraComponent;
@@ -35,7 +35,7 @@ protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
-	USkeletalMeshComponent* GetMesh3P() { return Mesh3P; }	
+	USkeletalMeshComponent* GetMesh3P() { return Mesh1P; }	
 
 protected:
 	UPROPERTY(Replicated,BlueprintReadOnly, Category = "Animation")
@@ -46,5 +46,9 @@ public:
 	virtual void Landed(const FHitResult& Hit) override;
 
 	bool IsJumping()const { return bIsJumping; }
+
+protected:
+	virtual void OnRep_bIsEnergyDischarged() override;
+
 
 };

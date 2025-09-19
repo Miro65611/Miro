@@ -26,7 +26,8 @@ void UMIMegaMikeAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 			}
 
 			bIsJumping = Character->IsJumping();
-		}
+			bIsEnergyDischarged = Character->IsEnergyDischarged();
+	 	}
 	}
 
 }

@@ -27,4 +27,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Animation")
 	float RightSpeedRatio;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Animation")
+	bool bIsEnergyDischarged;
+
+
 };
