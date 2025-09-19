@@ -50,5 +50,8 @@ public:
 protected:
 	virtual void OnRep_bIsEnergyDischarged() override;
 
+private: 
+	FTransform RelativeMeshTransform;
+
 
 };

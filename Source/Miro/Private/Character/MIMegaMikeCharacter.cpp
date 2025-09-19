@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Net/UnrealNetwork.h"
 
 
@@ -22,15 +23,16 @@ AMIMegaMikeCharacter::AMIMegaMikeCharacter()
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 
 	// 메쉬 설정
-	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
-	Mesh1P->SetOnlyOwnerSee(true);
-	Mesh1P->SetupAttachment(Capsule);
-	Mesh1P->bCastDynamicShadow = false;
-	Mesh1P->CastShadow = false;
-
 	USkeletalMeshComponent* Mesh3P = GetMesh();
 	Mesh3P->SetOwnerNoSee(true);
 	Mesh3P->SetupAttachment(Capsule);
+
+	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
+	Mesh1P->SetupAttachment(Mesh3P);
+	Mesh1P->SetOnlyOwnerSee(true);
+	Mesh1P->bCastDynamicShadow = false;
+	Mesh1P->CastShadow = false;
+
 
 }
 
@@ -38,6 +40,7 @@ void AMIMegaMikeCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	RelativeMeshTransform = GetMesh()->GetRelativeTransform();
 }
 
 void AMIMegaMikeCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -81,13 +84,16 @@ void AMIMegaMikeCharacter::OnRep_bIsEnergyDischarged()
 		Mesh1P->SetVisibility(false);
 
 		// 1. 충돌 설정
+		//Mesh3P->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+
 		Mesh3P->SetSimulatePhysics(true);
 		Mesh3P->SetCollisionProfileName(TEXT("Ragdoll"));
 
-		//GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		SetRootComponent(Mesh3P);
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 
 		// 2. 카메라 설정
+
 
 	}
 	else
@@ -97,10 +103,19 @@ void AMIMegaMikeCharacter::OnRep_bIsEnergyDischarged()
 		// 1. 충돌 설정
 		Mesh3P->SetSimulatePhysics(false);
 		Mesh3P->SetCollisionProfileName(TEXT("CharacterMesh"));
-		SetRootComponent(GetCapsuleComponent());
 
+		UCapsuleComponent* Capsule = GetCapsuleComponent();
 
-		//GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		const FVector MeshPosition = Mesh3P->GetComponentTransform().GetTranslation();
+		const FVector RagdollOffset{ 0.f,0.f,Capsule->GetUnscaledCapsuleHalfHeight() };
+		const FVector AddPosition = MeshPosition + RagdollOffset;
+
+		Mesh3P->SetRelativeTransform(RelativeMeshTransform);
+		Capsule->SetWorldLocation(AddPosition);
+
+		Capsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+
 
 		// 2. 카메라 설정
 
