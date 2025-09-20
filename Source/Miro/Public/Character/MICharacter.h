@@ -11,6 +11,7 @@ class UCameraComponent;
 class UInputAction;
 class UInputMappingContext;
 struct FInputActionValue;
+class IMIInteractable;
 
 UCLASS()
 class MIRO_API AMICharacter : public ACharacter
@@ -30,30 +31,36 @@ public:
 
 	virtual void NotifyControllerChanged() override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* FirstPersonCameraComponent = nullptr;
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputMappingContext* DefaultMappingContext;
+	UInputMappingContext* DefaultMappingContext = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* JumpAction;
+	UInputAction* JumpAction = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* MoveAction;
+	UInputAction* MoveAction = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* DashAction;
+	UInputAction* DashAction = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* LookAction;
+	UInputAction* LookAction = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* InteractAction;
+	UInputAction* InteractAction = nullptr;
 
 protected:
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void OnDashInput();
 	void OffDashInput();
+	void Interact();
 
 	UFUNCTION(Server, Unreliable)
 	void Server_SetDashInput(bool bIsOnDashInput);
@@ -78,10 +85,10 @@ private:
 	float MaxEnergy = 100.f;
 
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly, Category = Status, meta = (AllowPrivateAccess = "true"))
-	float CurrentEnergy;
+	float CurrentEnergy = 0.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Status, meta = (AllowPrivateAccess = "true"))
-	float DecreaseEnergyPerSecond = 10.f;
+	float DecreaseEnergyPerSecond = 1.f;
 
 	void BeginStatus();
 
@@ -95,11 +102,23 @@ protected:
 	UFUNCTION()
 	virtual void OnRep_bIsEnergyDischarged();
 
-
 public:
 	bool IsEnergyDischarged()const { return bIsEnergyDischarged; }
 
 	UFUNCTION(BlueprintCallable, Category = "Status")
 	float GetCurrentEnergy()const { return CurrentEnergy; }
 
+private:
+	IMIInteractable* NearestInteractableObject;
+
+	/// <summary>
+	/// 상호작용 가능 거리
+	/// </summary>
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	float InteractableDistance = 100.f;
+
+	/// <summary>
+	/// 상호작용  가능한 물체를 감지
+	/// </summary>
+	void DetectInteractableObject();
 };

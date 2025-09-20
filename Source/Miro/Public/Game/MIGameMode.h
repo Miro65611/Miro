@@ -19,6 +19,7 @@ public:
 
 	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
 	virtual void StartPlay() override;
+	virtual void BeginPlay() override;
 
 	virtual void PreLogin(const FString& Options, const FString& Address, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage) override;
 	virtual APlayerController* Login(UPlayer* NewPlayer, ENetRole InRemoteRole, const FString& Portal, const FString& Options, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage) override;
@@ -27,14 +28,13 @@ public:
 	virtual void HandleDisconnect(UWorld* InWorld, UNetDriver* NetDriver) override;
 
 	virtual void Tick(float DeltaSeconds) override;
-	void EndGame();
 
 protected:
-
 	/// <summary>
 	/// 다음 스테이지로 이동할때 호출
 	/// </summary>
 	virtual void GoNextStage();
 
-private:
+public:
+	virtual void HandleStageClear();
 };

@@ -7,7 +7,6 @@
 #include "MIMegaMikeCharacter.generated.h"
 
 class USkeletalMeshComponent;
-class UCameraComponent;
 
 /**
  * MegaMike Mesh Ä³¸¯ÅÍ 
@@ -20,9 +19,6 @@ class MIRO_API AMIMegaMikeCharacter : public AMICharacter
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh, meta = (AllowPrivateAccess = "true"))
 	USkeletalMeshComponent* Mesh1P;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* FirstPersonCameraComponent;
 
 public:
 	AMIMegaMikeCharacter();

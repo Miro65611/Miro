@@ -16,12 +16,6 @@ AMIMegaMikeCharacter::AMIMegaMikeCharacter()
 	UCapsuleComponent* Capsule = GetCapsuleComponent();
 	Capsule->InitCapsuleSize(10.f, 60.0f);
 
-	// 카메라 설정
-	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
-	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
-	FirstPersonCameraComponent->SetRelativeLocation(FVector(0.f, 0.f, 60.f)); // Position the camera
-	FirstPersonCameraComponent->bUsePawnControlRotation = true;
-
 	// 메쉬 설정
 	USkeletalMeshComponent* Mesh3P = GetMesh();
 	Mesh3P->SetOwnerNoSee(true);
@@ -92,9 +86,6 @@ void AMIMegaMikeCharacter::OnRep_bIsEnergyDischarged()
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 
-		// 2. 카메라 설정
-
-
 	}
 	else
 	{
@@ -117,7 +108,6 @@ void AMIMegaMikeCharacter::OnRep_bIsEnergyDischarged()
 		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 
 
-		// 2. 카메라 설정
 
 	}
 

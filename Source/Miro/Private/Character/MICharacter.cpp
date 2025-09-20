@@ -4,10 +4,15 @@
 #include "Character/MICharacter.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "InputActionValue.h"
-#include "Net/UnrealNetwork.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PlayerController.h"
+#include "Components/CapsuleComponent.h"
+#include "Camera/CameraComponent.h"
+#include "Net/UnrealNetwork.h"
+#include "InputActionValue.h"
+#include "Interface/MIInteractable.h"
+
+
 // Sets default values
 AMICharacter::AMICharacter()
 {
@@ -20,6 +25,11 @@ AMICharacter::AMICharacter()
 	// 서버가 항상 이 액터를 클라이언트에게 복제하도록 강제
 	bAlwaysRelevant = true;
 
+	// 카메라 설정
+	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
+	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
+	FirstPersonCameraComponent->SetRelativeLocation(FVector(0.f, 0.f, 60.f)); // Position the camera
+	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 }
 
 void AMICharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -41,6 +51,8 @@ void AMICharacter::BeginPlay()
 void AMICharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	DetectInteractableObject();
 
 	UpdateMaxWalkSpeed();
 	UpdateStatus(DeltaTime);
@@ -89,6 +101,10 @@ void AMICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMICharacter::Look);
+
+		// Interact
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AMICharacter::Interact);
+
 	}
 	else
 	{
@@ -127,6 +143,14 @@ void AMICharacter::OnDashInput()
 void AMICharacter::OffDashInput()
 {
 	Server_SetDashInput(false);
+}
+
+void AMICharacter::Interact()
+{
+	if (NearestInteractableObject)
+	{
+		NearestInteractableObject->OnInteract(this);
+	}
 }
 
 void AMICharacter::UpdateMaxWalkSpeed()
@@ -195,6 +219,42 @@ void AMICharacter::OnRep_bIsEnergyDischarged()
 	else
 	{
 		Subsystem->AddMappingContext(DefaultMappingContext, 0);
+	}
+
+}
+
+void AMICharacter::DetectInteractableObject()
+{
+	// 캐릭터의 시선(카메라) 위치와 방향을 가져옵니다.
+	FVector StartLocation = FirstPersonCameraComponent->GetComponentLocation();
+	FVector EndLocation = StartLocation + FirstPersonCameraComponent->GetComponentRotation().Vector() * InteractableDistance;
+
+	FCollisionQueryParams TraceParams;
+	TraceParams.AddIgnoredActor(this);
+
+	FHitResult HitResult;
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(
+		HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, TraceParams);
+
+	IMIInteractable* InteractableActor = Cast<IMIInteractable>(HitResult.GetActor());
+
+	if (bHit && InteractableActor && InteractableActor->CanInteractable())
+	{
+		NearestInteractableObject = InteractableActor;
+	}
+	else
+	{
+		NearestInteractableObject = nullptr;
+	}
+
+	if (NearestInteractableObject)
+	{
+		DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Red, false, 0.0f, 0, 1.0f);
+	}
+	else
+	{
+		DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Green, false, 0.0f, 0, 1.0f);
 	}
 
 }

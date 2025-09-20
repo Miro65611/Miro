@@ -6,6 +6,8 @@
 #include "Miro/Miro.h"
 #include "Game/MIGameState.h"
 #include "Kismet/GameplayStatics.h"
+#include "Props/MIGoalPoint.h"
+#include "EngineUtils.h"
 
 AMIGameMode::AMIGameMode()
 {
@@ -29,10 +31,16 @@ void AMIGameMode::StartPlay()
 
 
 
-	static  FTimerHandle TimerHandle;
+}
 
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &AMIGameMode::GoNextStage, 10.f, false);
+void AMIGameMode::BeginPlay()
+{
+	Super::BeginPlay();
 
+	for (TActorIterator<AMIGoalPoint> Iter(GetWorld()); Iter; ++Iter)
+	{
+		Iter->OnNextStageButtonPressed.AddUObject(this, &AMIGameMode::HandleStageClear);
+	}
 }
 
 void AMIGameMode::PreLogin(const FString& Options, const FString& Address, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage)
@@ -85,17 +93,19 @@ void AMIGameMode::Tick(float DeltaSeconds)
 
 }
 
-void AMIGameMode::EndGame()
-{
-	//	UGameplayStatics::OpenLevel(this, FName("Lobby"), true);
-}
-
 void AMIGameMode::GoNextStage()
 {
-	// TODO : 게임 레벨 종료 추가
+	//	UGameplayStatics::OpenLevel(this, FName("Lobby"), true);
 
+	// TODO : 게임 레벨 종료 추가
 
 
 	ProcessServerTravel(TEXT("Lobby"), true);
 }
+
+void AMIGameMode::HandleStageClear()
+{
+	GoNextStage();
+}
+
 

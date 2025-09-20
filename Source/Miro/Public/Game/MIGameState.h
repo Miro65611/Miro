@@ -6,6 +6,7 @@
 #include "GameFramework/GameState.h"
 #include "MIGameState.generated.h"
 
+
 /**
  * 게임 클라이언트 상태를 관리한다
  */
@@ -13,12 +14,18 @@ UCLASS()
 class MIRO_API AMIGameState : public AGameState
 {
 	GENERATED_BODY()
-	
+
 public:
 	AMIGameState();
 
-public:
+protected:
 	virtual void Tick(float DeltaSeconds) override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+public:
+
+private:
+	UPROPERTY(Replicated)
+	bool bIsClearStage;
 
 };
