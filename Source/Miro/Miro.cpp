@@ -3,4 +3,5 @@
 #include "Miro.h"
 #include "Modules/ModuleManager.h"
 
+DEFINE_LOG_CATEGORY(LogMINetwork);
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, Miro, "Miro" );

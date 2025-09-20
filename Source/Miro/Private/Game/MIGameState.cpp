@@ -3,3 +3,11 @@
 
 #include "Game/MIGameState.h"
 
+AMIGameState::AMIGameState()
+{
+}
+
+void AMIGameState::Tick(float DeltaSeconds)
+{
+	
+}

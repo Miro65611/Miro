@@ -3,22 +3,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameState.h"
-#include "MIGameState.generated.h"
+#include "GameFramework/PlayerState.h"
+#include "MIPlayerState.generated.h"
 
 /**
- * 게임 클라이언트 상태를 관리한다
+ * 
  */
 UCLASS()
-class MIRO_API AMIGameState : public AGameState
+class MIRO_API AMIPlayerState : public APlayerState
 {
 	GENERATED_BODY()
-	
+
 public:
-	AMIGameState();
+	AMIPlayerState();
 
 public:
 	virtual void Tick(float DeltaSeconds) override;
-
 
 };
