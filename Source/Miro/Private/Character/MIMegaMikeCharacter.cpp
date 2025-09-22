@@ -65,7 +65,7 @@ void AMIMegaMikeCharacter::Landed(const FHitResult& Hit)
 	Super::Landed(Hit);
 	bIsJumping = false;
 
-	UE_LOG(LogTemp, Log, TEXT("Landed"));
+	//UE_LOG(LogTemp, Log, TEXT("Landed"));
 }
 
 void AMIMegaMikeCharacter::OnRep_bIsEnergyDischarged()
@@ -78,14 +78,11 @@ void AMIMegaMikeCharacter::OnRep_bIsEnergyDischarged()
 		Mesh1P->SetVisibility(false);
 
 		// 1. 충돌 설정
-		//Mesh3P->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-
 		Mesh3P->SetSimulatePhysics(true);
 		Mesh3P->SetCollisionProfileName(TEXT("Ragdoll"));
 
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
-
 	}
 	else
 	{
@@ -106,9 +103,6 @@ void AMIMegaMikeCharacter::OnRep_bIsEnergyDischarged()
 
 		Capsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
-
-
-
 	}
 
 }

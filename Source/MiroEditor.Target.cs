@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+ // Copyright Epic Games, Inc. All Rights Reserved.
 
 using UnrealBuildTool;
 using System.Collections.Generic;
@@ -13,6 +13,7 @@ public class MiroEditorTarget : TargetRules
 		ExtraModuleNames.Add("Miro");
         ExtraModuleNames.Add("MiroSessionModule");
         ExtraModuleNames.Add("MazeGeneratorModule");
+        ExtraModuleNames.Add("MazeEditorModule");
 
     }
 }

@@ -9,7 +9,8 @@
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
-				"Engine"
+				"Engine",
+				"CoreUObject"
 			]
 		},
 		{
@@ -27,6 +28,19 @@
 			"AdditionalDependencies": [
 				"Engine",
 				"CoreUObject"
+			]
+		},
+		{
+			"Name": "MazeEditorModule",
+			"Type": "Editor",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"CoreUObject",
+				"Engine",
+				"Slate",
+				"SlateCore",
+				"EditorSubsystem"
 			]
 		}
 	],
