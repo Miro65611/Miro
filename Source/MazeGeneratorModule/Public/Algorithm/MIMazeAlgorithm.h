@@ -19,10 +19,8 @@ public:
 
 	void SetRandomStream(const TSharedPtr<FRandomStream>& InRandomStream);
 
-	virtual FMISpanningTree GenerateSpanningTree(const int32 Vertices, const FMIGraph& InGraph);
-
-
-
+	virtual FMISpanningTree GenerateSpanningTree(const int32 Vertices, const FMIGraph& AdjacencyList);
+	
 protected:
 	FMISpanningTree SpanningTree;
 	TSharedPtr<FRandomStream> RandomStream;

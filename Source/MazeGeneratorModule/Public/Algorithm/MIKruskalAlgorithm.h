@@ -17,7 +17,7 @@ class MAZEGENERATORMODULE_API UMIKruskalAlgorithm : public UMIMazeAlgorithm
 	
 public:
 	UMIKruskalAlgorithm();
-	virtual FMISpanningTree GenerateSpanningTree(const int32 Vertices, const FMIGraph& InGraph) override;
+	virtual FMISpanningTree GenerateSpanningTree(const int32 Vertices, const FMIGraph& AdjacencyList) override;
 
 private:
 	TArray<int32> Parent;

@@ -8,14 +8,14 @@ UMIKruskalAlgorithm::UMIKruskalAlgorithm()
 {
 }
 
-FMISpanningTree UMIKruskalAlgorithm::GenerateSpanningTree(const int32 Vertices, const FMIGraph& InGraph)
+FMISpanningTree UMIKruskalAlgorithm::GenerateSpanningTree(const int32 Vertices, const FMIGraph& AdjacencyList)
 {
 	TArray<TPair<int32, int32>> Edges;
 
 	// 모든 간선(벽 정보를 가져온다)
 	for (int Index = 0; Index < Vertices; ++Index)
 	{
-		for (const FMIEdge& Edge : InGraph[Index])
+		for (const FMIEdge& Edge : AdjacencyList[Index])
 		{
 			if (Edge.Get<0>() > Index)
 			{
