@@ -6,7 +6,7 @@
 #include "Widgets/SCompoundWidget.h"
 
 /**
- * 2D 구조의 미로의 랜더링을 담당
+ * 2D 
  */
 class MAZEEDITORMODULE_API SMI2DMazeWidget : public SCompoundWidget
 {

@@ -12,11 +12,11 @@
 
 AMIMegaMikeCharacter::AMIMegaMikeCharacter()
 {
-	// Ä¸½¶ÄÄÆ÷³ÍÆ® ¼³Á¤
+	// Ä¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
 	UCapsuleComponent* Capsule = GetCapsuleComponent();
 	Capsule->InitCapsuleSize(10.f, 60.0f);
 
-	// ¸Þ½¬ ¼³Á¤
+	// ï¿½Þ½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	USkeletalMeshComponent* Mesh3P = GetMesh();
 	Mesh3P->SetOwnerNoSee(true);
 	Mesh3P->SetupAttachment(Capsule);
@@ -77,7 +77,7 @@ void AMIMegaMikeCharacter::OnRep_bIsEnergyDischarged()
 	{
 		Mesh1P->SetVisibility(false);
 
-		// 1. Ãæµ¹ ¼³Á¤
+		// 1. ï¿½æµ¹ ï¿½ï¿½ï¿½ï¿½
 		Mesh3P->SetSimulatePhysics(true);
 		Mesh3P->SetCollisionProfileName(TEXT("Ragdoll"));
 
@@ -88,7 +88,7 @@ void AMIMegaMikeCharacter::OnRep_bIsEnergyDischarged()
 	{
 		Mesh1P->SetVisibility(true);
 
-		// 1. Ãæµ¹ ¼³Á¤
+		// 1. ï¿½æµ¹ ï¿½ï¿½ï¿½ï¿½
 		Mesh3P->SetSimulatePhysics(false);
 		Mesh3P->SetCollisionProfileName(TEXT("CharacterMesh"));
 

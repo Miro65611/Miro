@@ -9,7 +9,7 @@
 class USkeletalMeshComponent;
 
 /**
- * MegaMike Mesh дЁ╦╞ем 
+ * MegaMike Mesh дЁО©╫О©╫О©╫О©╫ 
  */
 UCLASS()
 class MIRO_API AMIMegaMikeCharacter : public AMICharacter

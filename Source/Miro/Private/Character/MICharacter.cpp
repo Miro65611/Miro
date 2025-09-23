@@ -18,14 +18,14 @@ AMICharacter::AMICharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	// ÀÌ ¾×ÅÍ¸¦ ³×Æ®¿öÅ©¸¦ ÅëÇØ º¹Á¦(Replicate)ÇÏµµ·Ï ¼³Á¤ÇÕ´Ï´Ù.
+
 	bReplicates = true;
-	// ÇÃ·¹ÀÌ¾î ÀÔ·Â¿¡ ´ëÇÑ ÄÁÆ®·ÑÀ» º¹Á¦ÇÏµµ·Ï ¼³Á¤ÇÕ´Ï´Ù.
+
 	SetReplicatingMovement(true);
-	// ¼­¹ö°¡ Ç×»ó ÀÌ ¾×ÅÍ¸¦ Å¬¶óÀÌ¾ğÆ®¿¡°Ô º¹Á¦ÇÏµµ·Ï °­Á¦
+
 	bAlwaysRelevant = true;
 
-	// Ä«¸Ş¶ó ¼³Á¤
+	// Camera Setup
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
 	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
 	FirstPersonCameraComponent->SetRelativeLocation(FVector(0.f, 0.f, 60.f)); // Position the camera
@@ -179,14 +179,14 @@ void AMICharacter::UpdateStatus(float DeltaTime)
 		const float DecreaseEnergy = DecreaseEnergyPerSecond * DeltaTime;
 		CurrentEnergy = FMath::Max(CurrentEnergy - DecreaseEnergy, 0.f);
 
-		// ¹æÀü»óÅÂ ÁøÀÔ
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		if (!bIsEnergyDischarged && CurrentEnergy <= 0.f)
 		{
 			bIsEnergyDischarged = true;
 			OnRep_bIsEnergyDischarged();
 		}
 
-		// ÃæÀü»óÅÂ ÁøÀÔ
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		if (bIsEnergyDischarged && CurrentEnergy > 0.f)
 		{
 			bIsEnergyDischarged = false;
@@ -211,7 +211,7 @@ void AMICharacter::OnRep_bIsEnergyDischarged()
 		return;
 	}
 
-	// ÀÔ·Â ¹ÙÀÎµù °ü¸®
+	// ï¿½Ô·ï¿½ ï¿½ï¿½ï¿½Îµï¿½ ï¿½ï¿½ï¿½ï¿½
 	if (bIsEnergyDischarged)
 	{
 		Subsystem->RemoveMappingContext(DefaultMappingContext);
@@ -225,7 +225,7 @@ void AMICharacter::OnRep_bIsEnergyDischarged()
 
 void AMICharacter::DetectInteractableObject()
 {
-	// Ä³¸¯ÅÍÀÇ ½Ã¼±(Ä«¸Ş¶ó) À§Ä¡¿Í ¹æÇâÀ» °¡Á®¿É´Ï´Ù.
+	// Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã¼ï¿½(Ä«ï¿½Ş¶ï¿½) ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½É´Ï´ï¿½.
 	FVector StartLocation = FirstPersonCameraComponent->GetComponentLocation();
 	FVector EndLocation = StartLocation + FirstPersonCameraComponent->GetComponentRotation().Vector() * InteractableDistance;
 

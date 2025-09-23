@@ -24,20 +24,20 @@ void FMazeEditorModule::StartupModule()
 		.SetTooltipText(LOCTEXT("MazeEditorTooltip", "Open the Maze Editor window"))
 		.SetMenuType(ETabSpawnerMenuType::Hidden);
 
-	// 2. ToolMenus·Î Window ¸Þ´º È®Àå
+	// 2. ToolMenusï¿½ï¿½ Window ï¿½Þ´ï¿½ È®ï¿½ï¿½
 	UToolMenus::RegisterStartupCallback(
 		FSimpleMulticastDelegate::FDelegate::CreateRaw(this, &FMazeEditorModule::RegisterMenus));
 }
 
 void FMazeEditorModule::RegisterMenus()
 {
-	// "Window" ¸ÞÀÎ ¸Þ´º °¡Á®¿À±â
+	// "Window" ï¿½ï¿½ï¿½ï¿½ ï¿½Þ´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	UToolMenu* Menu = UToolMenus::Get()->ExtendMenu("LevelEditor.MainMenu.Window");
 
-	// MazeTools Section Ãß°¡ 
+	// MazeTools Section ï¿½ß°ï¿½ 
 	FToolMenuSection& Section = Menu->AddSection("MazeTools", LOCTEXT("MazeToolsSection", "Maze Tools"));
 
-	// ¸Þ´º Ç×¸ñ Ãß°¡
+	// ï¿½Þ´ï¿½ ï¿½×¸ï¿½ ï¿½ß°ï¿½
 	Section.AddMenuEntry(
 		"OpenMazeEditor",
 		LOCTEXT("OpenMazeEditor", "Maze Editor"),
@@ -57,7 +57,7 @@ void FMazeEditorModule::ShutdownModule()
 
 TSharedRef<SDockTab> FMazeEditorModule::OnSpawnPluginTab(const FSpawnTabArgs& SpawnTabArgs)
 {
-	// SCompoundWidget¸¦ »ó¼Ó¹ÞÀº Ä¿½ºÅÒ À§Á¬À» ÅÇÀÇ ÄÜÅÙÃ÷·Î ¼³Á¤ÇÕ´Ï´Ù.
+	// SCompoundWidgetï¿½ï¿½ ï¿½ï¿½Ó¹ï¿½ï¿½ï¿½ Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
 	TSharedRef<SWidget> TabContent = SNew(SMIMazeWidget);
 
 	return SNew(SDockTab)

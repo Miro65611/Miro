@@ -13,7 +13,6 @@ UMIMazeGenerator::UMIMazeGenerator()
 void UMIMazeGenerator::GenerateMaze()
 {
 	Maze->InitializeGraph();
-
-
+	Maze->GenerateMaze(MazeAlgorithm.Get());
 
 }

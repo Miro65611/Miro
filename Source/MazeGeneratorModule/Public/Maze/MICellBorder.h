@@ -9,11 +9,6 @@ class FMICellBorder
 public:
 };
 
-
-/// <summary>
-/// 직선 형태 벽
-/// (X1,Y1)----(X2,Y2) 직선
-/// </summary>
 class FMILineBorder : public FMICellBorder
 {
 public:
@@ -27,18 +22,6 @@ protected:
 	double Y2;
 };
 
-/// <summary>
-/// 호 형태 벽
-/// 
-///		   < (Theta2)
-///	      <	 
-///    R <
-///	    <
-///	   <
-///   < < < < < <(Theta1)
-/// (X,Y)
-/// 대충 이런느낌 
-/// </summary>
 class FMIArcBorder : public FMICellBorder
 {
 public:

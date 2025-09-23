@@ -19,8 +19,9 @@ class MAZEGENERATORMODULE_API UMIMazeGenerator : public UObject
 
 public:
 	UMIMazeGenerator();
-
 	void GenerateMaze();
+	UMIMaze* GetMaze()const { return Maze.Get(); }
+
 
 private:
 	UPROPERTY()

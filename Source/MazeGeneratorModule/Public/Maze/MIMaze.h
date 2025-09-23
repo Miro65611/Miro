@@ -7,10 +7,11 @@
 #include "MIMaze.generated.h"
 
 class UMIMazeAlgorithm;
+
 /**
  * 미로의 기본 클래스
  */
-UCLASS()
+UCLASS(Abstract)
 class MAZEGENERATORMODULE_API UMIMaze : public UObject
 {
 	GENERATED_BODY()

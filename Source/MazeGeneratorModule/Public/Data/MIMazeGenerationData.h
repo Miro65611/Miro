@@ -8,9 +8,9 @@
 
 class UMIMaze;
 class UMIMazeAlgorithm;
-
+  
 /**
- * πÃ∑Œ ª˝º∫ µ•¿Ã≈Õ 
+ * ÎØ∏Î°ú ÏÉùÏÑ± Îç∞Ïù¥ÌÑ∞ 
  */
 UCLASS()
 class MAZEGENERATORMODULE_API UMIMazeGenerationData : public UDataAsset
@@ -23,4 +23,14 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Maze")
 	TSubclassOf<UMIMazeAlgorithm> MazeAlgorithm;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Maze")
+	int32 StartVertex;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Maze")
+	int32 EndVertex;
+
+	
+	
+	
 };

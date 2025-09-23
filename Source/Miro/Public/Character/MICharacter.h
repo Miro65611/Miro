@@ -112,13 +112,13 @@ private:
 	IMIInteractable* NearestInteractableObject;
 
 	/// <summary>
-	/// »óÈ£ÀÛ¿ë °¡´É °Å¸®
+	/// ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½
 	/// </summary>
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	float InteractableDistance = 100.f;
 
 	/// <summary>
-	/// »óÈ£ÀÛ¿ë  °¡´ÉÇÑ ¹°Ã¼¸¦ °¨Áö
+	/// ï¿½ï¿½È£ï¿½Û¿ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	/// </summary>
 	void DetectInteractableObject();
 };

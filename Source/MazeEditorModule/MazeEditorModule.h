@@ -8,19 +8,18 @@
 class FMazeEditorModule : public IModuleInterface
 {
 public:
-    /**
-     * ¸ğµâÀÌ ·ÎµåµÉ ¶§ È£ÃâµË´Ï´Ù.
-     */
-    virtual void StartupModule() override;
+	/**
+	 * Moduleì´ ì‹œì‘í• ë•Œ í˜¸ì¶œ  
+	 */
+	virtual void StartupModule() override;
 
 
-    /**
-     * ¸ğµâÀÌ ¾ğ·ÎµåµÉ ¶§ È£ÃâµË´Ï´Ù.
-     */
-    virtual void ShutdownModule() override;
+	/**
+	 * Moduleì´ ëë‚  ë•Œ í˜¸ì¶œ
+	 */
+	virtual void ShutdownModule() override;
 
-    void RegisterMenus();
+	void RegisterMenus();
 
-    TSharedRef<SDockTab> OnSpawnPluginTab(const FSpawnTabArgs& SpawnTabArgs);
+	TSharedRef<SDockTab> OnSpawnPluginTab(const FSpawnTabArgs& SpawnTabArgs);
 };
-

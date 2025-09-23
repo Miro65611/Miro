@@ -31,7 +31,7 @@ void SMIMazeWidget::Construct(const FArguments& InArgs)
 						+ SHorizontalBox::Slot()
 						.AutoWidth()
 						.VAlign(VAlign_Center)
-						.Padding(0.f, 0.f, 4.f, 0.f) // 오른쪽에만 약간의 여백
+						.Padding(0.f, 0.f, 4.f, 0.f) 
 						[
 							SNew(STextBlock)
 								.Text(FText::FromString("Maze Algorithm:"))

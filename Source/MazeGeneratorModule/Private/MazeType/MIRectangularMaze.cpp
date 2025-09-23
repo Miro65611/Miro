@@ -12,21 +12,21 @@ void UMIRectangularMaze::InitializeGraph()
 	AdjacencyList.Empty();
 	AdjacencyList.SetNum(Width * Height);
 
-	// ÇÏ´Ü ¹× »ó´Ü °æ°è
+	// ï¿½Ï´ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 	for (int32 Column = 0; Column < Width; ++Column)
 	{
 		AdjacencyList[GetVertexIndex(0, Column)].Add(FMIEdge(-1, MakeShared<FMILineBorder>(Column, Height, Column + 1, Height)));
 		AdjacencyList[GetVertexIndex(Height - 1, Column)].Add(FMIEdge(-1, MakeShared<FMILineBorder>(Column, Height, Column + 1, Height)));
 	}
 
-	// ÁÂÃø ¹× ¿ìÃø °æ°è (ÀÔ±¸¿Í Ãâ±¸ °ø°£ Á¦¿Ü)
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ (ï¿½Ô±ï¿½ï¿½ï¿½ ï¿½â±¸ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
 	for (int32 Row = 0; Row < Height; ++Row)
 	{
 		AdjacencyList[GetVertexIndex(Row, 0)].Add(FMIEdge(-1, MakeShared<FMILineBorder>(0, Row, 0, Row + 1)));
 		AdjacencyList[GetVertexIndex(Row, Width - 1)].Add(FMIEdge(-1, MakeShared<FMILineBorder>(Width, Row, Width, Row + 1)));
 	}
 
-	// ¼öÆò ÀÎÁ¢ ¼¿
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 	for (int32 Row = 0; Row < Height; ++Row)
 	{
 		for (int32 Column = 0; Column < Width - 1; ++Column)
@@ -37,7 +37,7 @@ void UMIRectangularMaze::InitializeGraph()
 		}
 	}
 
-	// ¼öÁ÷ ÀÎÁ¢ ¼¿
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 	for (int32 Row = 0; Row < Height - 1; ++Row)
 	{
 		for (int32 Column = 0; Column < Width; ++Column)

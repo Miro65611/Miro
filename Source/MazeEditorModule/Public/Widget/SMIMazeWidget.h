@@ -6,7 +6,7 @@
 #include "Widgets/SCompoundWidget.h"
 
 /**
- * 미로 생성 에디터
+ * 
  */
 class MAZEEDITORMODULE_API SMIMazeWidget : public SCompoundWidget
 {

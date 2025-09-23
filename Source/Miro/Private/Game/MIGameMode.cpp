@@ -97,7 +97,7 @@ void AMIGameMode::GoNextStage()
 {
 	//	UGameplayStatics::OpenLevel(this, FName("Lobby"), true);
 
-	// TODO : °ÔÀÓ ·¹º§ Á¾·á Ãß°¡
+	// TODO : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
 
 
 	ProcessServerTravel(TEXT("Lobby"), true);

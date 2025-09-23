@@ -3,3 +3,10 @@
 
 #include "Subsystem/MIMazeSubsystem.h"
 
+void UMIMazeSubsystem::Initialize(FSubsystemCollectionBase& Collection)
+{
+}
+
+void UMIMazeSubsystem::Deinitialize()
+{
+}
