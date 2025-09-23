@@ -18,12 +18,12 @@ public:
 	/** 위젯 생성 및 초기화 */
 	void Construct(const FArguments& InArgs);
 
-	void Temp();
-	
 protected:
 	virtual int32 OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry, const FSlateRect& MyCullingRect, FSlateWindowElementList& OutDrawElements, int32 LayerId, const FWidgetStyle& InWidgetStyle, bool bParentEnabled) const override; 
 
+	virtual FReply OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
+	virtual FReply OnMouseWheel(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent) override;
+
 private:
-	// 미로 데이터를 저장할 배열 (0: 벽, 1: 길)
-	TArray<TArray<int32>> MazeData;
+	
 };

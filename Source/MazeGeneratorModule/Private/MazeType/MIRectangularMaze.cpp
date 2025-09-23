@@ -26,7 +26,7 @@ void UMIRectangularMaze::InitializeGraph(FMIGraph& InAdjacencyList)
 	for (int32 Column = 0; Column < Width; ++Column)
 	{
 		AdjacencyList[GetVertexIndex(0, Column)].Add(
-			FMIEdge(-1, MakeShared<FMILineBorder>(Column, Height, Column + 1, Height)));
+			FMIEdge(-1, MakeShared<FMILineBorder>(Column, 0, Column + 1, 0)));
 		AdjacencyList[GetVertexIndex(Height - 1, Column)].Add(
 			FMIEdge(-1, MakeShared<FMILineBorder>(Column, Height, Column + 1, Height)));
 	}
