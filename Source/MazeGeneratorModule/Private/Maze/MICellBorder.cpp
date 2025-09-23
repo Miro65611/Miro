@@ -23,3 +23,4 @@ FMIArcBorder::FMIArcBorder(double CenterX, double CenterY, double Radius, double
 	:CenterX(CenterX), CenterY(CenterY), Radius(Radius), Theta1(Theta1), Theta2(Theta2)
 {
 }
+	

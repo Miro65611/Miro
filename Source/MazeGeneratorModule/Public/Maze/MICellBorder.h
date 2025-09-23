@@ -7,28 +7,29 @@
 class FMICellBorder
 {
 public:
+	virtual ~FMICellBorder(){}
 };
 
+// 직선 벽
 class FMILineBorder : public FMICellBorder
 {
 public:
 	FMILineBorder();
 	FMILineBorder(double InX1, double InY1, double InX2, double InY2);
 
-protected:
 	double X1;
 	double Y1;
 	double X2;
 	double Y2;
 };
 
+// 호 모양 벽
 class FMIArcBorder : public FMICellBorder
 {
 public:
 	FMIArcBorder();
 	FMIArcBorder(double CenterX, double CenterY, double Radius, double Theta1, double Theta2);
 
-protected:
 	double CenterX;
 	double CenterY;
 	double Radius;

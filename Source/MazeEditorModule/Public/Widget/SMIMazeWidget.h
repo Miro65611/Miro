@@ -21,20 +21,8 @@ public:
 	/** Constructs this widget with InArgs */
 	void Construct(const FArguments& InArgs);
 
-	FString GetMazeAlgorithmPath()const;
-
-	void OnMazeAlgorithmClassChanged(const UClass* InClass);
-
-	const UClass* GetMazeAlorithmClass()const { return MazeAlgorithmClass; }
-
-	virtual int32 OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry,
-		const FSlateRect& MyCullingRect, FSlateWindowElementList& OutDrawElements,
-		int32 LayerId, const FWidgetStyle& InWidgetStyle, bool bParentEnabled) const override;
-
-
 private:
-	UClass* MazeAlgorithmClass = nullptr;
-	UClass* MazeType = nullptr;
-	TSharedPtr<class UMIMazeGenerator> MazeGenerator = nullptr;
+	TSharedRef<SWidget> BuildMazeDataHeader();
+	TSharedRef<SWidget> BuildMazeGenerateButton();
 
 };

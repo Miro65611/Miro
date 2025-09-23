@@ -3,30 +3,42 @@
 
 #include "MazeType/MIRectangularMaze.h"
 
+
 UMIRectangularMaze::UMIRectangularMaze()
 {
 }
 
-void UMIRectangularMaze::InitializeGraph()
+void UMIRectangularMaze::PostInitProperties()
 {
+	Super::PostInitProperties();
+
+	
+}
+
+void UMIRectangularMaze::InitializeGraph(FMIGraph& InAdjacencyList)
+{
+	FMIGraph& AdjacencyList = InAdjacencyList;
+
 	AdjacencyList.Empty();
 	AdjacencyList.SetNum(Width * Height);
 
-	// �ϴ� �� ��� ���
+	// 상하 벽
 	for (int32 Column = 0; Column < Width; ++Column)
 	{
-		AdjacencyList[GetVertexIndex(0, Column)].Add(FMIEdge(-1, MakeShared<FMILineBorder>(Column, Height, Column + 1, Height)));
-		AdjacencyList[GetVertexIndex(Height - 1, Column)].Add(FMIEdge(-1, MakeShared<FMILineBorder>(Column, Height, Column + 1, Height)));
+		AdjacencyList[GetVertexIndex(0, Column)].Add(
+			FMIEdge(-1, MakeShared<FMILineBorder>(Column, Height, Column + 1, Height)));
+		AdjacencyList[GetVertexIndex(Height - 1, Column)].Add(
+			FMIEdge(-1, MakeShared<FMILineBorder>(Column, Height, Column + 1, Height)));
 	}
 
-	// ���� �� ���� ��� (�Ա��� �ⱸ ���� ����)
+	// 좌우 벽
 	for (int32 Row = 0; Row < Height; ++Row)
 	{
 		AdjacencyList[GetVertexIndex(Row, 0)].Add(FMIEdge(-1, MakeShared<FMILineBorder>(0, Row, 0, Row + 1)));
-		AdjacencyList[GetVertexIndex(Row, Width - 1)].Add(FMIEdge(-1, MakeShared<FMILineBorder>(Width, Row, Width, Row + 1)));
+		AdjacencyList[GetVertexIndex(Row, Width - 1)].Add(
+			FMIEdge(-1, MakeShared<FMILineBorder>(Width, Row, Width, Row + 1)));
 	}
-
-	// ���� ���� ��
+	
 	for (int32 Row = 0; Row < Height; ++Row)
 	{
 		for (int32 Column = 0; Column < Width - 1; ++Column)
@@ -37,7 +49,7 @@ void UMIRectangularMaze::InitializeGraph()
 		}
 	}
 
-	// ���� ���� ��
+
 	for (int32 Row = 0; Row < Height - 1; ++Row)
 	{
 		for (int32 Column = 0; Column < Width; ++Column)
@@ -49,7 +61,12 @@ void UMIRectangularMaze::InitializeGraph()
 	}
 }
 
-int32 UMIRectangularMaze::GetVertexIndex(int32 Row, int32 Column) const
+int32 UMIRectangularMaze::GetVertices() const
+{
+	return Width * Height;
+}
+
+int32 UMIRectangularMaze::GetVertexIndex(const int32 Row, const int32 Column) const
 {
 	return Row * Width + Column;
 }

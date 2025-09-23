@@ -6,7 +6,7 @@
 #include "Engine/DataAsset.h"
 #include "MIMazeGenerationData.generated.h"
 
-class UMIMaze;
+class UMIMazeType;
 class UMIMazeAlgorithm;
   
 /**
@@ -19,10 +19,10 @@ class MAZEGENERATORMODULE_API UMIMazeGenerationData : public UDataAsset
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Maze")
-	TSubclassOf<UMIMaze> MazeType;
+	TSubclassOf<UMIMazeType> MazeTypeClass;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Maze")
-	TSubclassOf<UMIMazeAlgorithm> MazeAlgorithm;
+	TSubclassOf<UMIMazeAlgorithm> MazeAlgorithmClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Maze")
 	int32 StartVertex;
@@ -30,7 +30,5 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Maze")
 	int32 EndVertex;
 
-	
-	
 	
 };

@@ -7,7 +7,8 @@
 #include "MIKruskalAlgorithm.generated.h"
 
 /**
- * 크루스칼 알고리즘
+ * Kruskal
+ * 
  */
 UCLASS()
 class MAZEGENERATORMODULE_API UMIKruskalAlgorithm : public UMIMazeAlgorithm
@@ -16,7 +17,7 @@ class MAZEGENERATORMODULE_API UMIKruskalAlgorithm : public UMIMazeAlgorithm
 	
 public:
 	UMIKruskalAlgorithm();
-	virtual FMISpanningTree GenerateSpannigTree(int32 Vertices, const FMIGraph& InGraph) override;
+	virtual FMISpanningTree GenerateSpanningTree(const int32 Vertices, const FMIGraph& InGraph) override;
 
 private:
 	TArray<int32> Parent;

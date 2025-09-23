@@ -8,30 +8,33 @@ UMIKruskalAlgorithm::UMIKruskalAlgorithm()
 {
 }
 
-FMISpanningTree UMIKruskalAlgorithm::GenerateSpannigTree(int32 Vertices, const FMIGraph& InGraph)
+FMISpanningTree UMIKruskalAlgorithm::GenerateSpanningTree(const int32 Vertices, const FMIGraph& InGraph)
 {
 	TArray<TPair<int32, int32>> Edges;
 
+	// 모든 간선(벽 정보를 가져온다)
 	for (int Index = 0; Index < Vertices; ++Index)
 	{
 		for (const FMIEdge& Edge : InGraph[Index])
 		{
 			if (Edge.Get<0>() > Index)
 			{
-				Edges.Add({ Index, Edge.Get<0>() });
+				Edges.Add({Index, Edge.Get<0>()});
 			}
 		}
 	}
 
 	MiroRandomHelper::ShuffleWithStream(Edges, *RandomStream);
-	
-	Parent.Init(Vertices, 0);
+
+	// 집합초기화
+	Parent.Empty();
 	for (int32 Index = 0; Index < Vertices; ++Index)
 	{
-		Parent[Index] = Index;
+		Parent.Add(Index);
 	}
 
 	SpanningTree.Reset();
+
 
 	for (const TPair<int32, int32>& Edge : Edges)
 	{
@@ -44,7 +47,7 @@ FMISpanningTree UMIKruskalAlgorithm::GenerateSpannigTree(int32 Vertices, const F
 
 		Parent[U] = V;
 		SpanningTree.Add(Edge);
-	}       
+	}
 
 	return SpanningTree;
 }

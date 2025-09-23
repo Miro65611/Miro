@@ -10,12 +10,12 @@ UMIMazeAlgorithm::UMIMazeAlgorithm()
 {
 }
 
-void UMIMazeAlgorithm::SetRandomStream(const TSharedPtr<FRandomStream> InRandomStream)
+void UMIMazeAlgorithm::SetRandomStream(const TSharedPtr<FRandomStream>& InRandomStream)
 {
 	RandomStream = InRandomStream;
 }
 
-FMISpanningTree UMIMazeAlgorithm::GenerateSpannigTree(int32 Vertices, const FMIGraph& InGraph)
+FMISpanningTree UMIMazeAlgorithm::GenerateSpanningTree(const int32 Vertices, const FMIGraph& InGraph)
 {
 	return SpanningTree;
 }

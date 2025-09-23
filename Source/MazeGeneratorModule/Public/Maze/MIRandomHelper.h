@@ -10,7 +10,6 @@ namespace MiroRandomHelper
 		const int32 Count = Array.Num();
 		for (int32 Index = Count - 1; Index > 0; --Index)
 		{
-			// 0 ~ i 범위에서 난수 생성
 			const int32 NewIndex = Stream.RandRange(0, Index);
 
 			if (Index != NewIndex)

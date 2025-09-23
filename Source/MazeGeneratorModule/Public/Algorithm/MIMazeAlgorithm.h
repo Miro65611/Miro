@@ -7,7 +7,7 @@
 #include "MIMazeAlgorithm.generated.h"
 
 /**
- * �̷� �˰����� Ŭ���� 
+ * 미로 알고리즘 
  */
 UCLASS()
 class MAZEGENERATORMODULE_API UMIMazeAlgorithm : public UObject
@@ -17,8 +17,11 @@ class MAZEGENERATORMODULE_API UMIMazeAlgorithm : public UObject
 public:
 	UMIMazeAlgorithm();
 
-	void SetRandomStream(const TSharedPtr<FRandomStream> InRandomStream);
-	virtual FMISpanningTree GenerateSpannigTree(int32 Vertices, const FMIGraph& InGraph);
+	void SetRandomStream(const TSharedPtr<FRandomStream>& InRandomStream);
+
+	virtual FMISpanningTree GenerateSpanningTree(const int32 Vertices, const FMIGraph& InGraph);
+
+
 
 protected:
 	FMISpanningTree SpanningTree;

@@ -6,6 +6,7 @@
 #include "EditorSubsystem.h"
 #include "MIMazeSubsystem.generated.h"
 
+class UMIMazeGenerator;
 class UMIMazeGenerationData;
 
 /**
@@ -16,19 +17,28 @@ class MAZEEDITORMODULE_API UMIMazeSubsystem : public UEditorSubsystem
 {
 	GENERATED_BODY()
 
-public:    
-    // 초기화 시점 (에디터 실행 시)
-    virtual void Initialize(FSubsystemCollectionBase& Collection) override;
+public:
+	UMIMazeSubsystem();
+	
+	// Subsystem Interface
+	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
+	virtual void Deinitialize() override;
+	
+	UMIMazeGenerator* GetMazeGenerator();
+	UMIMazeGenerationData* GetMazeGenerationData();
 
-    // 종료 시점 (에디터 닫힐 때)
-    virtual void Deinitialize() override;
+	void SetMazeGeneratorData(UMIMazeGenerationData* Data);
 
-
+	void SetRandomStream(int32 InSeed = 0);
+	
 private:
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Maze", meta = (AllowPrivateAccess = "true"))
-    TObjectPtr<UMIMazeGenerationData> MazeGenerationData;
-    
+	UPROPERTY()
+	TObjectPtr<UMIMazeGenerator> MazeGenerator;
 
+	UPROPERTY()
+	TObjectPtr<UMIMazeGenerationData> MazeGenerationData;
 
+	TSharedPtr<FRandomStream> RandomStream;
 
+	int32 Seed;
 };

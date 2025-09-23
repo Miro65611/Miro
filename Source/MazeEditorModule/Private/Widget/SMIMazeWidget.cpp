@@ -3,91 +3,105 @@
 
 #include "Widget/SMIMazeWidget.h"
 #include "SlateOptMacros.h"
-#include "Maze/MIMazeGenerator.h"
-#include "Algorithm/MIMazeAlgorithm.h"
-#include "MazeType/MIRectangularMaze.h"
 #include "PropertyCustomizationHelpers.h"
+#include "Subsystem/MIMazeSubsystem.h"
+#include "Maze/MIMazeGenerator.h"
+#include "Data/MIMazeGenerationData.h"
+#include "Widget/SMI2DMazeWidget.h"
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
 SMIMazeWidget::SMIMazeWidget()
-	:MazeAlgorithmClass(UMIMazeAlgorithm::StaticClass())
-	,MazeType(UMIRectangularMaze::StaticClass())
 {
-
 }
 
 
 void SMIMazeWidget::Construct(const FArguments& InArgs)
 {
 	ChildSlot
-		[
-			SNew(SVerticalBox)
-				+ SVerticalBox::Slot()
-				.AutoHeight()
-				.Padding(2.0f, 2.0f) 
-				[
-					SNew(SHorizontalBox)
-						+ SHorizontalBox::Slot()
-						.AutoWidth()
-						.VAlign(VAlign_Center)
-						.Padding(0.f, 0.f, 4.f, 0.f) 
-						[
-							SNew(STextBlock)
-								.Text(FText::FromString("Maze Algorithm:"))
-						]
+	[
+		SNew(SVerticalBox)
 
-						+ SHorizontalBox::Slot()
-						.VAlign(VAlign_Center)
-						[
-							SNew(SClassPropertyEntryBox)
-								.MetaClass(UMIMazeAlgorithm::StaticClass())
-								.SelectedClass(this, &SMIMazeWidget::GetMazeAlorithmClass)
-								.OnSetClass(this, &SMIMazeWidget::OnMazeAlgorithmClassChanged)
-								.AllowNone(false)
-						]
-				]
+		+ SVerticalBox::Slot()
+		.AutoHeight()
+		.Padding(5)
+		[
+			BuildMazeDataHeader()
+		]
+
+		+ SVerticalBox::Slot()
+		.AutoHeight()
+		.Padding(5)
+		[
+			BuildMazeGenerateButton()
+		]
+
+		// 아래 큰 영역
+		+ SVerticalBox::Slot()
+		.FillHeight(1.0f)
+		.Padding(5)
+		[
+			SNew(SBorder)
+			.Padding(10)
+			[
+				SNew(SMI2DMazeWidget)
+			]
+		]
+	];
+}
+
+TSharedRef<SWidget> SMIMazeWidget::BuildMazeDataHeader()
+{
+	UMIMazeSubsystem* Subsystem = GEditor->GetEditorSubsystem<UMIMazeSubsystem>();
+	UMIMazeGenerator* MazeGenerator = Subsystem->GetMazeGenerator();
+
+	return SNew(SHorizontalBox)
+		+ SHorizontalBox::Slot()
+		.AutoWidth()
+		.VAlign(VAlign_Center)
+		.Padding(5, 0)
+		[
+			SNew(STextBlock)
+			.Text(FText::FromString(TEXT("Maze Data")))
+		]
+
+		+ SHorizontalBox::Slot()
+		.FillWidth(1.0f)
+		.VAlign(VAlign_Center)
+		.Padding(5, 0)
+		[
+			SNew(SObjectPropertyEntryBox)
+			.AllowedClass(UMIMazeGenerationData::StaticClass())
+			.AllowClear(false)
+			.OnObjectChanged_Lambda([Subsystem](const FAssetData& AssetData)
+			{
+				UMIMazeGenerationData* Data = Cast<UMIMazeGenerationData>(AssetData.GetAsset());
+				Subsystem->SetMazeGeneratorData(Data);
+			})
+			.ObjectPath_Lambda([Subsystem]()
+			{
+				if (Subsystem)
+				{
+					return Subsystem->GetMazeGenerationData()->GetPathName();
+				}
+				return FString("Maze Data");
+			})
 		];
 }
 
-FString SMIMazeWidget::GetMazeAlgorithmPath() const
+TSharedRef<SWidget> SMIMazeWidget::BuildMazeGenerateButton()
 {
-	return MazeAlgorithmClass ? MazeAlgorithmClass->GetPathName() : FString();
-}
-
-void SMIMazeWidget::OnMazeAlgorithmClassChanged(const UClass* InClass)
-{
-	MazeAlgorithmClass = const_cast<UClass*>(InClass);
-
-	MazeGenerator = MakeShared<UMIMazeGenerator>();
-
-}
-
-int32 SMIMazeWidget::OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry, const FSlateRect& MyCullingRect, FSlateWindowElementList& OutDrawElements, int32 LayerId, const FWidgetStyle& InWidgetStyle, bool bParentEnabled) const
-{
-	int32 MazeWidth = 20;
-	int32 MazeHeight = 20;
-	int32 CellSize = 20.f;
-
-	for (int32 Y = 0; Y < MazeHeight; ++Y)
-	{
-		for (int32 X = 0; X < MazeWidth; ++X)
+	UMIMazeSubsystem* Subsystem = GEditor->GetEditorSubsystem<UMIMazeSubsystem>();
+	UMIMazeGenerator* MazeGenerator = Subsystem->GetMazeGenerator();
+	
+	return SNew(SButton)
+		.Text(FText::FromString(TEXT("Generate Maze")))
+		.OnClicked_Lambda([MazeGenerator]()
 		{
-			FVector2D CellPos(X * CellSize, Y * CellSize);
-			//FLinearColor Color = Maze[Y][X].bWall ? FLinearColor::Black : FLinearColor::White;
-
-
-			FSlateDrawElement::MakeBox(
-				OutDrawElements,
-				LayerId,
-				AllottedGeometry.ToPaintGeometry(CellPos, FVector2D(CellSize, CellSize)),
-				FCoreStyle::Get().GetBrush("WhiteBrush"),
-				ESlateDrawEffect::None,
-				FLinearColor::Black
-			);
-		}
-	}
-	return LayerId + 1;
+			MazeGenerator->GenerateMaze();
+			UE_LOG(LogTemp, Display, TEXT("Generate Maze Success!"));
+			return FReply::Handled();
+		});
 }
 
 

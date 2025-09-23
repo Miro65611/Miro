@@ -3,27 +3,34 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Maze/MIMaze.h"
+#include "MazeType/MIMazeType.h"
 #include "MIRectangularMaze.generated.h"
 
 /**
- * ¡§ªÁ∞¢«¸ ∏æÁ πÃ∑Œ
+ * ÏÇ¨Í∞ÅÌòï Î™®Ïñë ÎØ∏Î°ú 
  */
-UCLASS()
-class MAZEGENERATORMODULE_API UMIRectangularMaze : public UMIMaze
+UCLASS(Blueprintable)
+class MAZEGENERATORMODULE_API UMIRectangularMaze : public UMIMazeType
 {
 	GENERATED_BODY()
 
 public:
 	UMIRectangularMaze();
+	
+	virtual void PostInitProperties() override;
+	
+	virtual void InitializeGraph(FMIGraph& InAdjacencyList) override;
 
-	virtual void InitializeGraph()override;
-
+	virtual int32 GetVertices() const override; 
+	
 private:
+	UPROPERTY(EditAnywhere, Category="Maze", meta=(AllowPrivateAccess="true"))
 	int32 Width;
+
+	UPROPERTY(EditAnywhere, Category="Maze", meta=(AllowPrivateAccess="true"))
 	int32 Height;
-	int32 GetVertexIndex(int32 Row, int32 Column) const;
+	
+	int32 GetVertexIndex(const int32 Row, const int32 Column) const;
 
-	virtual TTuple<double, double, double, double> GetCoordinateBounds()const override;
+	virtual TTuple<double, double, double, double> GetCoordinateBounds() const override;
 };
-
