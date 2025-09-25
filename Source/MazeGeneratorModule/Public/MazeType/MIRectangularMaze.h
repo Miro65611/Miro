@@ -16,20 +16,18 @@ class MAZEGENERATORMODULE_API UMIRectangularMaze : public UMIMazeType
 
 public:
 	UMIRectangularMaze();
-	
-	virtual void PostInitProperties() override;
-	
+
 	virtual void InitializeGraph(FMIGraph& InAdjacencyList) override;
 
-	virtual int32 GetVertices() const override; 
-	
+		virtual int32 GetVertices() const override;
+
 private:
 	UPROPERTY(EditAnywhere, Category="Maze", meta=(AllowPrivateAccess="true"))
-	int32 Width;
+	int32 Width = 20;
 
 	UPROPERTY(EditAnywhere, Category="Maze", meta=(AllowPrivateAccess="true"))
-	int32 Height;
-	
+	int32 Height = 20;
+
 	int32 GetVertexIndex(const int32 Row, const int32 Column) const;
 
 	virtual TTuple<double, double, double, double> GetCoordinateBounds() const override;

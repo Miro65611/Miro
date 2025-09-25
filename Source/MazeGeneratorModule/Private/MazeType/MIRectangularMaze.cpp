@@ -8,18 +8,12 @@ UMIRectangularMaze::UMIRectangularMaze()
 {
 }
 
-void UMIRectangularMaze::PostInitProperties()
-{
-	Super::PostInitProperties();
-
-	
-}
-
 void UMIRectangularMaze::InitializeGraph(FMIGraph& InAdjacencyList)
 {
+	Super::InitializeGraph(InAdjacencyList);
+	
 	FMIGraph& AdjacencyList = InAdjacencyList;
 
-	AdjacencyList.Empty();
 	AdjacencyList.SetNum(Width * Height);
 
 	// 상하 벽

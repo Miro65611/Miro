@@ -5,9 +5,9 @@
 #include "SlateOptMacros.h"
 #include "PropertyCustomizationHelpers.h"
 #include "Subsystem/MIMazeSubsystem.h"
-#include "Maze/MIMazeGenerator.h"
 #include "Data/MIMazeGenerationData.h"
 #include "Widget/SMI2DMazeWidget.h"
+#include "Widgets/Input/SNumericEntryBox.h"
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
@@ -33,10 +33,18 @@ void SMIMazeWidget::Construct(const FArguments& InArgs)
 		.AutoHeight()
 		.Padding(5)
 		[
+			BuildSeedInputButton()
+		]
+
+		+ SVerticalBox::Slot()
+		.AutoHeight()
+		.HAlign(HAlign_Center)
+		.VAlign(VAlign_Center)
+		.Padding(5)
+		[
 			BuildMazeGenerateButton()
 		]
 
-		// 아래 큰 영역
 		+ SVerticalBox::Slot()
 		.FillHeight(1.0f)
 		.Padding(5)
@@ -53,7 +61,6 @@ void SMIMazeWidget::Construct(const FArguments& InArgs)
 TSharedRef<SWidget> SMIMazeWidget::BuildMazeDataHeader()
 {
 	UMIMazeSubsystem* Subsystem = GEditor->GetEditorSubsystem<UMIMazeSubsystem>();
-	UMIMazeGenerator* MazeGenerator = Subsystem->GetMazeGenerator();
 
 	return SNew(SHorizontalBox)
 		+ SHorizontalBox::Slot()
@@ -92,15 +99,42 @@ TSharedRef<SWidget> SMIMazeWidget::BuildMazeDataHeader()
 TSharedRef<SWidget> SMIMazeWidget::BuildMazeGenerateButton()
 {
 	UMIMazeSubsystem* Subsystem = GEditor->GetEditorSubsystem<UMIMazeSubsystem>();
-	UMIMazeGenerator* MazeGenerator = Subsystem->GetMazeGenerator();
-	
+
 	return SNew(SButton)
 		.Text(FText::FromString(TEXT("Generate Maze")))
-		.OnClicked_Lambda([MazeGenerator]()
+		.OnClicked_Lambda([Subsystem]()
 		{
-			MazeGenerator->GenerateMaze();
-			UE_LOG(LogTemp, Display, TEXT("Generate Maze Success!"));
+			if (bool bSuccessInit = Subsystem->InitializeMaze())
+			{
+				Subsystem->GenerateMaze();
+				UE_LOG(LogTemp, Display, TEXT("Generate Maze Success!"));
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("Generate Maze Fail!"));
+			}
+
+			
 			return FReply::Handled();
+		});
+}
+
+TSharedRef<SWidget> SMIMazeWidget::BuildSeedInputButton()
+{
+	return SNew(SNumericEntryBox<int32>)
+		.MinValue(MIN_int32)
+		.MaxValue(MAX_int32)
+		.Value(0)
+		.OnValueCommitted_Lambda([this](const int32 Seed, const ETextCommit::Type CommitType)
+		{
+			if (CommitType == ETextCommit::Type::OnEnter)
+			{
+				UMIMazeSubsystem* Subsystem = GEditor->GetEditorSubsystem<UMIMazeSubsystem>();
+				Subsystem->SetRandomStream(Seed);
+			}
+
+			UE_LOG(LogTemp, Log, TEXT("Seed Committed: %d"), Seed);
+			//SeedValue = NewValue;
 		});
 }
 

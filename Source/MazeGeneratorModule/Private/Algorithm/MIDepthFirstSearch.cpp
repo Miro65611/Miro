@@ -8,14 +8,14 @@ UMIDepthFirstSearch::UMIDepthFirstSearch()
 {
 }
 
-FMISpanningTree UMIDepthFirstSearch::GenerateSpanningTree(const int32 Vertices, const FMIGraph& InGraph)
+FMISpanningTree UMIDepthFirstSearch::GenerateSpanningTree(const int32 Vertices, const FMIGraph& AdjacencyList)
 {
 	SpanningTree.Reset();
 
 	Parent.Empty();
 	Parent.Init(-1, Vertices);
 
-	DepthFirstSearch(RandomStream->RandRange(0, Vertices - 1), InGraph);
+	DepthFirstSearch(RandomStream->RandRange(0, Vertices - 1), AdjacencyList);
 	
 	return SpanningTree;
 }

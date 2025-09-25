@@ -18,7 +18,6 @@ AMICharacter::AMICharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-
 	bReplicates = true;
 
 	SetReplicatingMovement(true);

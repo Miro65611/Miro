@@ -19,8 +19,9 @@ public:
 
 	virtual void InitializeGraph(FMIGraph& InAdjacencyList);
 	virtual TTuple<double, double, double, double> GetCoordinateBounds()const;
-
 	virtual int32 GetVertices() const { return 0; }
+
+	void SetStartEndVertex(const int32 InStartVertex, const int32 InEndVertex);
 	
 protected:
 	int32 StartVertex;

@@ -4,23 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "Algorithm/MIMazeAlgorithm.h"
-#include "MIDepthFirstSearch.generated.h"
+#include "MIBreadFirstSearch.generated.h"
 
 /**
- * DFS - Recursive Backtracking
- * 
+ *  BFS
  */
 UCLASS()
-class MAZEGENERATORMODULE_API UMIDepthFirstSearch : public UMIMazeAlgorithm
+class MAZEGENERATORMODULE_API UMIBreadFirstSearch : public UMIMazeAlgorithm
 {
 	GENERATED_BODY()
 
 public:
-	UMIDepthFirstSearch();
+	UMIBreadFirstSearch();
 	
 	virtual FMISpanningTree GenerateSpanningTree(const int32 Vertices, const FMIGraph& AdjacencyList) override;
 
-protected:
-	TArray<int32> Parent;
-	void DepthFirstSearch(const int32, const FMIGraph& AdjacencyList);
+private:
+	TArray<bool> Visited;
+	TArray<int32> CurrentLevel;
+	TArray<int32> NextLevel;
 };

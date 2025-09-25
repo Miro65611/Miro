@@ -35,11 +35,10 @@ FMISpanningTree UMIKruskalAlgorithm::GenerateSpanningTree(const int32 Vertices, 
 
 	SpanningTree.Reset();
 
-
 	for (const TPair<int32, int32>& Edge : Edges)
 	{
-		int32 U = GetParent(Edge.Get<0>());
-		int32 V = GetParent(Edge.Get<1>());
+		const int32 U = GetParent(Edge.Get<0>());
+		const int32 V = GetParent(Edge.Get<1>());
 		if (U == V)
 		{
 			continue;

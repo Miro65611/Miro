@@ -3,6 +3,7 @@
 
 #include "Subsystem/MIMazeSubsystem.h"
 
+#include "Chaos/Deformable/MuscleActivationConstraints.h"
 #include "Maze/MIMazeGenerator.h"
 #include "Data/MIMazeGenerationData.h"
 
@@ -35,11 +36,27 @@ UMIMazeGenerationData* UMIMazeSubsystem::GetMazeGenerationData()
 void UMIMazeSubsystem::SetMazeGeneratorData(UMIMazeGenerationData* Data)
 {
 	MazeGenerationData = Data;
-	
-	// MazeGenerator 설정
-	MazeGenerator->InitializeMaze(Data);
-	SetRandomStream(0);
 }
+
+bool UMIMazeSubsystem::InitializeMaze()
+{
+	if (!IsValid(MazeGenerationData))
+	{
+		UE_LOG(LogTemp, Error, TEXT("MazGeneration is not Set"));
+		return false;
+	}
+	
+	MazeGenerator->InitializeMaze(MazeGenerationData);
+	SetRandomStream(Seed);
+
+	return true;
+}
+
+void UMIMazeSubsystem::GenerateMaze() 
+{
+	MazeGenerator->GenerateMaze();
+}
+
 
 void UMIMazeSubsystem::SetRandomStream(int32 InSeed)
 {

@@ -21,21 +21,18 @@ int32 SMI2DMazeWidget::OnPaint(const FPaintArgs& Args, const FGeometry& Allotted
                                const FWidgetStyle& InWidgetStyle, bool bParentEnabled) const
 {
 	++LayerId;
-	
+
 	const bool bIsEnabled = ShouldBeEnabled(bParentEnabled);
 	const ESlateDrawEffect DrawEffects = bIsEnabled ? ESlateDrawEffect::None : ESlateDrawEffect::DisabledEffect;
 
 	UMIMazeSubsystem* Subsystem = GEditor->GetEditorSubsystem<UMIMazeSubsystem>();
+
 	const FMIGraph& AdjacencyList = Subsystem->GetMazeGenerator()->GetAdjacencyList();
 
-	// 선분의 색상과 두께를 정의합니다.
-	const FLinearColor LineColor = FLinearColor::White;
-	constexpr float Thickness = 0.5f;
-	constexpr float ScaleStep = 10.f;
-
+	// Clipping 
 	const FSlateClippingZone ClippingZone(AllottedGeometry.GetLayoutBoundingRect());
 	OutDrawElements.PushClip(ClippingZone);
-	
+
 	// 선분을 그릴 점들을 정의합니다.
 	for (int32 Index1 = 0; Index1 < AdjacencyList.Num(); ++Index1)
 	{
@@ -43,13 +40,17 @@ int32 SMI2DMazeWidget::OnPaint(const FPaintArgs& Args, const FGeometry& Allotted
 
 		for (int32 V = 0; V < Edges.Num(); ++V)
 		{
-			const int32 Index2 = Edges[V].Get<0>();
+			constexpr float ScaleStep = 10.f;
+			constexpr float Thickness = 0.5f;
+
 			const TSharedPtr<FMICellBorder>& CellBorder = Edges[V].Get<1>();
 			const TSharedPtr<FMILineBorder>& LineBorder = StaticCastSharedPtr<FMILineBorder>(CellBorder);
 
 			TArray<FVector2D> Points;
 			Points.Add({LineBorder->X1 * ScaleStep, LineBorder->Y1 * ScaleStep});
 			Points.Add({LineBorder->X2 * ScaleStep, LineBorder->Y2 * ScaleStep});
+
+			const FLinearColor LineColor = FLinearColor::White;
 
 			FSlateDrawElement::MakeLines(
 				OutDrawElements,
@@ -61,15 +62,12 @@ int32 SMI2DMazeWidget::OnPaint(const FPaintArgs& Args, const FGeometry& Allotted
 				true, // Anti-Aliasing 여부
 				Thickness
 			);
-
 		}
 	}
 
 	OutDrawElements.PopClip();
 
-	// MakeLines 함수를 사용하여 선을 그립니다.
-
-	return LayerId +1;
+	return LayerId + 1;
 }
 
 FReply SMI2DMazeWidget::OnMouseMove(const FGeometry& MyGeometry, const FPointerEvent& MouseEvent)
@@ -78,12 +76,9 @@ FReply SMI2DMazeWidget::OnMouseMove(const FGeometry& MyGeometry, const FPointerE
 	{
 		const FVector2D CursorDelta = MouseEvent.GetCursorDelta();
 
-		UE_LOG(LogTemp, Log, TEXT("CursorDelta: X=%f, Y=%f"), CursorDelta.X, CursorDelta.Y);
-
 		const TScale2<float>& CurrentScale = GetRenderTransform()->GetMatrix().GetScale();
 		const FVector2D CurrentTranslation = GetRenderTransform()->GetTranslation();;
 
-		// 휠 입력에 따라 스케일 값 조정
 		const FVector2D NewPivot = CurrentTranslation + CursorDelta;
 
 		SetRenderTransform(FSlateRenderTransform(CurrentScale, NewPivot));

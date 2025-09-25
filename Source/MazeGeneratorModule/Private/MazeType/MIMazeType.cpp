@@ -12,10 +12,17 @@ UMIMazeType::UMIMazeType()
 
 void UMIMazeType::InitializeGraph(FMIGraph& InAdjacencyList)
 {
+	InAdjacencyList.Reset();
 }
 
 
 TTuple<double, double, double, double> UMIMazeType::GetCoordinateBounds() const
 {
 	return TTuple<double, double, double, double>();
+}
+
+void UMIMazeType::SetStartEndVertex(const int32 InStartVertex, const int32 InEndVertex)
+{
+	StartVertex = InStartVertex;
+	EndVertex = InEndVertex;
 }

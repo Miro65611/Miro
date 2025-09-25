@@ -30,15 +30,19 @@ public:
 
 	// 알고리즘과 미로형태를 바탕으로 새로운 미모를 생성합니다
 	void GenerateMaze();
-	
+
+	// 인접리스트를 반환합니다
 	const FMIGraph& GetAdjacencyList()const {return AdjacencyList;};
-	
+
+	// 랜덤 스트림(시드)을 반환합니다
+	TSharedPtr<FRandomStream> GetRandomStream()const {return RandomStream;};
+
 private:
 	
 	void RemoveBorders(const TArray<TPair<int32, int32>>& Edges);
 	
 private:
-	UPROPERTY()
+	UPROPERTY()	
 	TObjectPtr<UMIMazeType> MazeType;
 
 	UPROPERTY()
@@ -46,9 +50,9 @@ private:
 
 	int32 StartVertex;
 	int32 EndVertex;
+	int32 Vertices; 
 	FMIGraph AdjacencyList;
 	FMIGraph Solution;
-	int32 Vertices; 
 
 	TSharedPtr<FRandomStream> RandomStream;
 };

@@ -27,9 +27,23 @@ public:
 	UMIMazeGenerator* GetMazeGenerator();
 	UMIMazeGenerationData* GetMazeGenerationData();
 
+	// 미로 생성기의 데이터를 설정합니다
 	void SetMazeGeneratorData(UMIMazeGenerationData* Data);
 
+	// 미로를 초기화합니다.
+	bool InitializeMaze();
+
+	// 미로를 생성합니다
+	void GenerateMaze();
+	
+	// 랜덤 스트림을 설정합니다
 	void SetRandomStream(int32 InSeed = 0);
+
+	// 랜덤 스트림을 반환합니다
+	TSharedPtr<FRandomStream> GetRandomStream()const { return RandomStream; }
+
+	// 시드를 반환합니다
+	int32 GetSeed()const {return Seed;}
 	
 private:
 	UPROPERTY()

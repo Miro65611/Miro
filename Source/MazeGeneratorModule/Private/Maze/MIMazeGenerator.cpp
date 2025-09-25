@@ -5,6 +5,7 @@
 #include "MazeType/MIMazeType.h"
 #include "Algorithm/MIMazeAlgorithm.h"
 #include "Data/MIMazeGenerationData.h"
+#include "Engine/AssetManager.h"
 #include "MazeGeneratorModule/MazeGeneratorModule.h"
 
 UMIMazeGenerator::UMIMazeGenerator()
@@ -21,11 +22,12 @@ UMIMazeGenerator::UMIMazeGenerator(UMIMazeType* MazeType, UMIMazeAlgorithm* Maze
 void UMIMazeGenerator::SetRandomStream(const TSharedPtr<FRandomStream>& InRandomStream)
 {
 	RandomStream = InRandomStream;
-	 MazeAlgorithm->SetRandomStream(InRandomStream);
+	MazeAlgorithm->SetRandomStream(InRandomStream);
 }
 
 void UMIMazeGenerator::InitializeMaze(const UMIMazeGenerationData* MazeGenerationData)
 {
+	// 미로 객체 생성
 	MazeType = NewObject<UMIMazeType>(this, MazeGenerationData->MazeTypeClass);
 	if (MazeType == nullptr)
 	{
@@ -38,10 +40,13 @@ void UMIMazeGenerator::InitializeMaze(const UMIMazeGenerationData* MazeGeneratio
 		UE_LOG(LogTemp, Error, TEXT("MazeAlgorithm is nullptr"));
 	}
 
+	// 미로 데이터 설정
 	StartVertex = MazeGenerationData->StartVertex;
 	EndVertex = MazeGenerationData->EndVertex;
-
+	MazeType->SetStartEndVertex(StartVertex, EndVertex);
 	Vertices = MazeType->GetVertices();
+
+	UE_LOG(LogTemp, Log, TEXT("%d"), Vertices);
 }
 
 void UMIMazeGenerator::GenerateMaze()
