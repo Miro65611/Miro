@@ -8,6 +8,7 @@
 
 class UMIMazeGenerator;
 class UMIMazeGenerationData;
+class UMIMazeBuilder;
 
 /**
  *  MazeSubsystem
@@ -35,6 +36,12 @@ public:
 
 	// 미로를 생성합니다
 	void GenerateMaze();
+
+	// 미로를 인스턴스화합니다
+	void BuildMaze();
+
+	// 인스턴화한 미로를 제거합니다.
+	void DestroyMaze();
 	
 	// 랜덤 스트림을 설정합니다
 	void SetRandomStream(int32 InSeed = 0);
@@ -52,6 +59,11 @@ private:
 	UPROPERTY()
 	TObjectPtr<UMIMazeGenerationData> MazeGenerationData;
 
+	TSubclassOf<UObject> MazeBuilderClass;
+	
+	UPROPERTY()
+	TObjectPtr<UMIMazeBuilder> MazeBuilder;
+	
 	TSharedPtr<FRandomStream> RandomStream;
 
 	int32 Seed;

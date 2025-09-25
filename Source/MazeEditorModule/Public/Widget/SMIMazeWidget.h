@@ -24,6 +24,7 @@ public:
 private:
 	TSharedRef<SWidget> BuildMazeDataHeader();
 	TSharedRef<SWidget> BuildMazeGenerateButton();
+	TSharedRef<SWidget> BuildMazeBuildButton();
 	TSharedRef<SWidget> BuildSeedInputButton();
 	
 };

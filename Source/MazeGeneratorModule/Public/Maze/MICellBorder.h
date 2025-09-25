@@ -4,10 +4,19 @@
 
 #include "CoreMinimal.h"
 
+enum class ECellBorderType
+{
+	Line,
+	Arc,
+	None,
+};
+
 class FMICellBorder
 {
 public:
 	virtual ~FMICellBorder(){}
+
+	virtual ECellBorderType GetCellBorderType() const abstract;
 };
 
 // 직선 벽
@@ -21,6 +30,9 @@ public:
 	double Y1;
 	double X2;
 	double Y2;
+
+public:
+	virtual ECellBorderType GetCellBorderType() const override;
 };
 
 // 호 모양 벽
@@ -35,6 +47,8 @@ public:
 	double Radius;
 	double Theta1;
 	double Theta2;
+
+	virtual ECellBorderType GetCellBorderType() const override;
 };
 
 using FMIEdge = TTuple<int32, TSharedPtr<FMICellBorder>>;

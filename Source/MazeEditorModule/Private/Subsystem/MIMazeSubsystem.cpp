@@ -3,13 +3,21 @@
 
 #include "Subsystem/MIMazeSubsystem.h"
 
-#include "Chaos/Deformable/MuscleActivationConstraints.h"
 #include "Maze/MIMazeGenerator.h"
 #include "Data/MIMazeGenerationData.h"
+#include "Builder/MIMazeBuilder.h"
+
 
 UMIMazeSubsystem::UMIMazeSubsystem()
 {
 	MazeGenerator = NewObject<UMIMazeGenerator>();
+
+	ConstructorHelpers::FClassFinder<UObject> MazeBuilderBPClass(
+		TEXT("/Game/MapGenerator/Blueprint/BP_MazeBuilder.BP_MazeBuilder_C"));
+	if (MazeBuilderBPClass.Succeeded())
+	{
+		MazeBuilderClass = MazeBuilderBPClass.Class;
+	}
 }
 
 void UMIMazeSubsystem::Initialize(FSubsystemCollectionBase& Collection)
@@ -45,16 +53,46 @@ bool UMIMazeSubsystem::InitializeMaze()
 		UE_LOG(LogTemp, Error, TEXT("MazGeneration is not Set"));
 		return false;
 	}
-	
+
 	MazeGenerator->InitializeMaze(MazeGenerationData);
 	SetRandomStream(Seed);
 
 	return true;
 }
 
-void UMIMazeSubsystem::GenerateMaze() 
+void UMIMazeSubsystem::GenerateMaze()
 {
 	MazeGenerator->GenerateMaze();
+}
+
+void UMIMazeSubsystem::BuildMaze()
+{
+	if (MazeBuilder == nullptr)
+	{
+		MazeBuilder = NewObject<UMIMazeBuilder>(this, MazeBuilderClass);
+	}
+
+	UWorld* World = nullptr;
+	if (GEditor->PlayWorld) // PIE 실행 중
+	{
+		World = GEditor->PlayWorld;
+	}
+	else
+	{
+		World = GEditor->GetEditorWorldContext().World();
+	}
+	
+	MazeBuilder->BuildMaze(MazeGenerator->GetAdjacencyList(), World);
+}
+
+void UMIMazeSubsystem::DestroyMaze()
+{
+	if (MazeBuilder == nullptr)
+	{
+		MazeBuilder = NewObject<UMIMazeBuilder>(this, MazeBuilderClass);
+	}
+	
+	MazeBuilder->DestroyMaze();
 }
 
 

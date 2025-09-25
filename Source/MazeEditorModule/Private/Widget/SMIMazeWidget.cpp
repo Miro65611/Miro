@@ -38,6 +38,13 @@ void SMIMazeWidget::Construct(const FArguments& InArgs)
 
 		+ SVerticalBox::Slot()
 		.AutoHeight()
+		.Padding(5)
+		[
+			BuildMazeBuildButton()
+		]
+
+		+ SVerticalBox::Slot()
+		.AutoHeight()
 		.HAlign(HAlign_Center)
 		.VAlign(VAlign_Center)
 		.Padding(5)
@@ -114,7 +121,22 @@ TSharedRef<SWidget> SMIMazeWidget::BuildMazeGenerateButton()
 				UE_LOG(LogTemp, Error, TEXT("Generate Maze Fail!"));
 			}
 
-			
+
+			return FReply::Handled();
+		});
+}
+
+TSharedRef<SWidget> SMIMazeWidget::BuildMazeBuildButton()
+{
+	UMIMazeSubsystem* Subsystem = GEditor->GetEditorSubsystem<UMIMazeSubsystem>();
+
+	return SNew(SButton)
+		.Text(FText::FromString(TEXT("Build Maze")))
+		.OnClicked_Lambda([Subsystem]()
+		{
+			Subsystem->DestroyMaze();
+			Subsystem->BuildMaze();
+
 			return FReply::Handled();
 		});
 }

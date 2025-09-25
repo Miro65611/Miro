@@ -67,7 +67,7 @@ void UMIMazeGenerator::GenerateMaze()
 
 	const FMISpanningTree SpanningTree = MazeAlgorithm->GenerateSpanningTree(Vertices, AdjacencyList);
 
-	RemoveBorders(SpanningTree);
+	RemoveBorders(SpanningTree); 
 }
 
 void UMIMazeGenerator::RemoveBorders(const TArray<TPair<int32, int32>>& Edges)

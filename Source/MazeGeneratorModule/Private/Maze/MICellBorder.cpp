@@ -14,6 +14,11 @@ FMILineBorder::FMILineBorder(double InX1, double InY1, double InX2, double InY2)
 {
 }
 
+ECellBorderType FMILineBorder::GetCellBorderType() const
+{
+	return ECellBorderType::Line;
+}
+
 FMIArcBorder::FMIArcBorder()
 	:CenterX(0), CenterY(0), Radius(0), Theta1(0), Theta2(0)
 {
@@ -22,5 +27,10 @@ FMIArcBorder::FMIArcBorder()
 FMIArcBorder::FMIArcBorder(double CenterX, double CenterY, double Radius, double Theta1, double Theta2)
 	:CenterX(CenterX), CenterY(CenterY), Radius(Radius), Theta1(Theta1), Theta2(Theta2)
 {
+}
+
+ECellBorderType FMIArcBorder::GetCellBorderType() const
+{
+	return ECellBorderType::Arc;
 }
 	

@@ -50,36 +50,38 @@ void UMICircularMaze::InitializeGraph(FMIGraph& InAdjacencyList)
 	// 링 정보 초기화
 	InitializeRing();
 
-	for (int32 I = 0; I < NumberOfRing; I++)
+	InAdjacencyList.SetNum(GetVertices());
+
+	for (int32 I = 1; I < NumberOfRing; I++)
 	{
-		for (int J = 0; J < RingNodePrefixSum.Num(); J++)
+		for (int J = 0; J < RingNodeCount[I]; J++)
 		{
-			int32 Node = RingNodePrefixSum[I] + J;
+			int32 CurrentNodeIndex = RingNodePrefixSum[I] + J;
 			TSharedPtr<FMICellBorder> Ptr = nullptr;
 
-			int32 NumNode = RingNodePrefixSum[I - 1] + (RingNodeCount[I - 1] * J) / RingNodeCount[I];
+			int32 TargetNodeIndex = RingNodePrefixSum[I - 1] + (RingNodeCount[I - 1] * J) / RingNodeCount[I];
 
-			Ptr = MakeShared<FMIArcBorder>(0, 0, I, J * 2 * M_PI / RingNodeCount[i] - M_PI / 2,
-			                               (J + 1) * 2 * M_PI / RingNodeCount[i] - M_PI / 2);
+			Ptr = MakeShared<FMIArcBorder>(0, 0, I, J * 2 * M_PI / RingNodeCount[I] - M_PI / 2,
+			                               (J + 1) * 2 * M_PI / RingNodeCount[I] - M_PI / 2);
 
-			InAdjacencyList[Node].Add({NumNode, Ptr});
-			InAdjacencyList[NumNode].Add({Node, Ptr});
+			InAdjacencyList[CurrentNodeIndex].Add({TargetNodeIndex, Ptr});
+			InAdjacencyList[TargetNodeIndex].Add({CurrentNodeIndex, Ptr});
 
-			NumNode = RingNodePrefixSum[I] + ((J + 1) % RingNodeCount[I]);
+			TargetNodeIndex = RingNodePrefixSum[I] + ((J + 1) % RingNodeCount[I]);
 			const double Theta = (J + 1) * 2 * M_PI / RingNodeCount[I] - M_PI / 2;
 
 			Ptr = MakeShared<FMILineBorder>(I * FMath::Cos(Theta), I * FMath::Sin(Theta),
 			                                (I + 1) * FMath::Cos(Theta), (I + 1) * FMath::Sin(Theta));
 
-			InAdjacencyList[Node].Add({NumNode, Ptr});
-			InAdjacencyList[NumNode].Add({Node, Ptr});
+			InAdjacencyList[CurrentNodeIndex].Add({TargetNodeIndex, Ptr});
+			InAdjacencyList[TargetNodeIndex].Add({CurrentNodeIndex, Ptr});
 
 			// 가장자리 원
 			if (I == NumberOfRing - 1)
 			{
 				Ptr = MakeShared<FMIArcBorder>(0, 0, NumberOfRing, J * 2 * M_PI / RingNodeCount[I] - M_PI / 2,
 				                               (J + 1) * 2 * M_PI / RingNodeCount[I] - M_PI / 2);
-				InAdjacencyList[Node].Add({-1, Ptr});
+				InAdjacencyList[CurrentNodeIndex].Add({-1, Ptr});
 			}
 		}
 	}

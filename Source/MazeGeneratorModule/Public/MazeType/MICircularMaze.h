@@ -9,7 +9,7 @@
 /**
  * Circular Type
  */
-UCLASS()
+UCLASS(Blueprintable)
 class MAZEGENERATORMODULE_API UMICircularMaze : public UMIMazeType
 {
 	GENERATED_BODY()
@@ -17,15 +17,15 @@ class MAZEGENERATORMODULE_API UMICircularMaze : public UMIMazeType
 public:
 	virtual void InitializeGraph(FMIGraph& InAdjacencyList) override;
 	virtual TTuple<double, double, double, double> GetCoordinateBounds() const override;
-	virtual int32 GetVertices() const override; 
+	virtual int32 GetVertices() const override;
 
 	// Ring개수에 따라서 초기화
 	virtual void PostInitProperties() override;
-	
+
 private:
 	UPROPERTY(EditAnywhere, Category="Maze", meta=(AllowPrivateAccess="true"))
-	int32 NumberOfRing;
-	
+	int32 NumberOfRing = 5;
+
 	TArray<int32> RingNodeCount;
 	TArray<int32> RingNodePrefixSum;
 

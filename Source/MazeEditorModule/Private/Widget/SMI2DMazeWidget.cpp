@@ -44,24 +44,69 @@ int32 SMI2DMazeWidget::OnPaint(const FPaintArgs& Args, const FGeometry& Allotted
 			constexpr float Thickness = 0.5f;
 
 			const TSharedPtr<FMICellBorder>& CellBorder = Edges[V].Get<1>();
-			const TSharedPtr<FMILineBorder>& LineBorder = StaticCastSharedPtr<FMILineBorder>(CellBorder);
-
-			TArray<FVector2D> Points;
-			Points.Add({LineBorder->X1 * ScaleStep, LineBorder->Y1 * ScaleStep});
-			Points.Add({LineBorder->X2 * ScaleStep, LineBorder->Y2 * ScaleStep});
-
 			const FLinearColor LineColor = FLinearColor::White;
 
-			FSlateDrawElement::MakeLines(
-				OutDrawElements,
-				LayerId,
-				AllottedGeometry.ToPaintGeometry(), // 로컬 좌표 → 페인트 좌표 변환
-				Points,
-				DrawEffects,
-				LineColor,
-				true, // Anti-Aliasing 여부
-				Thickness
-			);
+
+			// dynamic cast  사용하기에는 좀..... 그렇다고 UObject로 만들기에도 좀.....
+			if (CellBorder->GetCellBorderType() == ECellBorderType::Line)
+			{
+				const TSharedPtr<FMILineBorder>& LineBorder = StaticCastSharedPtr<FMILineBorder>(CellBorder);
+
+				TArray<FVector2D> Points;
+				Points.Add({LineBorder->X1 * ScaleStep, LineBorder->Y1 * ScaleStep});
+				Points.Add({LineBorder->X2 * ScaleStep, LineBorder->Y2 * ScaleStep});
+
+
+				FSlateDrawElement::MakeLines(
+					OutDrawElements,
+					LayerId,
+					AllottedGeometry.ToPaintGeometry(), // 로컬 좌표 → 페인트 좌표 변환
+					Points,
+					DrawEffects,
+					LineColor,
+					true, // Anti-Aliasing 여부
+					Thickness
+				);
+			}
+			else if (CellBorder->GetCellBorderType() == ECellBorderType::Arc)
+			{
+				// 아치모양 그리기 함수 지원해줘 빽!
+				const TSharedPtr<FMIArcBorder>& ArcBorder = StaticCastSharedPtr<FMIArcBorder>(CellBorder);
+
+				double CenterX = ArcBorder->CenterX;
+				double CenterY = ArcBorder->CenterY;
+				double Radius = ArcBorder->Radius;
+				double Theta1 = ArcBorder->Theta1;
+				double Theta2 = ArcBorder->Theta2;
+
+				constexpr int32 NumSegments = 64;
+
+				TArray<FVector2D> ArcPoints;
+				ArcPoints.Reserve(NumSegments + 1);
+
+				for (int32 Index = 0; Index < NumSegments; ++Index)
+				{
+					double Alpha = FMath::Lerp(Theta1, Theta2,
+					                           static_cast<double>(Index) / static_cast<double>(NumSegments));
+					double X = CenterX + Radius * FMath::Cos(Alpha);
+					double Y = CenterY + Radius * FMath::Sin(Alpha);
+					ArcPoints.Add(FVector2D(X * ScaleStep, Y * ScaleStep));
+				}
+
+				FSlateDrawElement::MakeLines(
+					OutDrawElements,
+					LayerId,
+					AllottedGeometry.ToPaintGeometry(), // 로컬 좌표 → 페인트 좌표 변환
+					ArcPoints,
+					DrawEffects,
+					LineColor,
+					true, // Anti-Aliasing 여부
+					Thickness
+				);
+			}
+			else if (CellBorder->GetCellBorderType() == ECellBorderType::None)
+			{
+			}
 		}
 	}
 
