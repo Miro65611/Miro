@@ -4,7 +4,7 @@
 #include "MazeType/MICircularMaze.h"
 
 #include <ThirdParty/hlslcc/hlslcc/src/hlslcc_lib/compiler.h>
-
+#include "Math/UnrealMathUtility.h"
 
 TTuple<double, double, double, double> UMICircularMaze::GetCoordinateBounds() const
 {
@@ -54,7 +54,7 @@ void UMICircularMaze::InitializeGraph(FMIGraph& InAdjacencyList)
 
 	for (int32 I = 1; I < NumberOfRing; I++)
 	{
-		for (int J = 0; J < RingNodeCount[I]; J++)
+		for (int32 J = 0; J < RingNodeCount[I]; J++)
 		{
 			int32 CurrentNodeIndex = RingNodePrefixSum[I] + J;
 			TSharedPtr<FMICellBorder> Ptr = nullptr;

@@ -11,7 +11,7 @@
 #include "Net/UnrealNetwork.h"
 #include "InputActionValue.h"
 #include "Interface/MIInteractable.h"
-
+#include "Subsystem/MIMazeGameSubsystem.h"
 
 // Sets default values
 AMICharacter::AMICharacter()
@@ -63,6 +63,9 @@ void AMICharacter::Tick(float DeltaTime)
 		if (PlayerController->IsInputKeyDown(EKeys::P))
 		{
 			CurrentEnergy = MaxEnergy;
+
+			if (HasAuthority())
+				GetGameInstance()->GetSubsystem<UMIMazeGameSubsystem>()->InitializeMaze(10);
 		}
 	}
 }
@@ -74,7 +77,8 @@ void AMICharacter::NotifyControllerChanged()
 
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<
+			UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
@@ -103,13 +107,10 @@ void AMICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 		// Interact
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AMICharacter::Interact);
-
 	}
 	else
 	{
-
 	}
-
 }
 
 void AMICharacter::Move(const FInputActionValue& Value)
@@ -204,7 +205,8 @@ void AMICharacter::OnRep_bIsEnergyDischarged()
 		return;
 	}
 
-	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(
+		PlayerController->GetLocalPlayer());
 	if (Subsystem == nullptr)
 	{
 		return;
@@ -219,14 +221,14 @@ void AMICharacter::OnRep_bIsEnergyDischarged()
 	{
 		Subsystem->AddMappingContext(DefaultMappingContext, 0);
 	}
-
 }
 
 void AMICharacter::DetectInteractableObject()
 {
 	// ĳ������ �ü�(ī�޶�) ��ġ�� ������ �����ɴϴ�.
 	FVector StartLocation = FirstPersonCameraComponent->GetComponentLocation();
-	FVector EndLocation = StartLocation + FirstPersonCameraComponent->GetComponentRotation().Vector() * InteractableDistance;
+	FVector EndLocation = StartLocation + FirstPersonCameraComponent->GetComponentRotation().Vector() *
+		InteractableDistance;
 
 	FCollisionQueryParams TraceParams;
 	TraceParams.AddIgnoredActor(this);
@@ -255,16 +257,4 @@ void AMICharacter::DetectInteractableObject()
 	{
 		DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Green, false, 0.0f, 0, 1.0f);
 	}
-
 }
-
-
-
-
-
-
-
-
-
-
-

@@ -68,10 +68,10 @@ void UMITriangularMaze::InitializeGraph(FMIGraph& InAdjacencyList)
 		const int32 CellInRow = GetCellsInRow(Row);
 		for (int Col = 0; Col < CellInRow - 1; ++Col)
 		{
-			TSharedPtr<FMILineBorder> ptr =
+			TSharedPtr<FMILineBorder> Ptr =
 				MakeShared<FMILineBorder>(Col + 1, Row, Col + 1, Row + 1);
-			InAdjacencyList[GetVertexIndex(Row, Col)].Add({GetVertexIndex(Row, Col + 1), ptr});
-			InAdjacencyList[GetVertexIndex(Row, Col + 1)].Add({GetVertexIndex(Row, Col), ptr});
+			InAdjacencyList[GetVertexIndex(Row, Col)].Add({GetVertexIndex(Row, Col + 1), Ptr});
+			InAdjacencyList[GetVertexIndex(Row, Col + 1)].Add({GetVertexIndex(Row, Col), Ptr});
 		}
 	}
 

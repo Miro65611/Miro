@@ -1,14 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Subsystem/MIMazeSubsystem.h"
+#include "Subsystem/MIMazeEditorSubsystem.h"
 
 #include "Maze/MIMazeGenerator.h"
 #include "Data/MIMazeGenerationData.h"
 #include "Builder/MIMazeBuilder.h"
 
 
-UMIMazeSubsystem::UMIMazeSubsystem()
+UMIMazeEditorSubsystem::UMIMazeEditorSubsystem()
 {
 	MazeGenerator = NewObject<UMIMazeGenerator>();
 
@@ -20,33 +20,33 @@ UMIMazeSubsystem::UMIMazeSubsystem()
 	}
 }
 
-void UMIMazeSubsystem::Initialize(FSubsystemCollectionBase& Collection)
+void UMIMazeEditorSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 
 	UE_LOG(LogTemp, Log, TEXT("UMIMazeSubsystem::Initialize"));
 }
 
-void UMIMazeSubsystem::Deinitialize()
+void UMIMazeEditorSubsystem::Deinitialize()
 {
 }
 
-UMIMazeGenerator* UMIMazeSubsystem::GetMazeGenerator()
+UMIMazeGenerator* UMIMazeEditorSubsystem::GetMazeGenerator()
 {
 	return MazeGenerator;
 }
 
-UMIMazeGenerationData* UMIMazeSubsystem::GetMazeGenerationData()
+UMIMazeGenerationData* UMIMazeEditorSubsystem::GetMazeGenerationData()
 {
 	return MazeGenerationData;
 }
 
-void UMIMazeSubsystem::SetMazeGeneratorData(UMIMazeGenerationData* Data)
+void UMIMazeEditorSubsystem::SetMazeGeneratorData(UMIMazeGenerationData* Data)
 {
 	MazeGenerationData = Data;
 }
 
-bool UMIMazeSubsystem::InitializeMaze()
+bool UMIMazeEditorSubsystem::InitializeMaze()
 {
 	if (!IsValid(MazeGenerationData))
 	{
@@ -60,12 +60,12 @@ bool UMIMazeSubsystem::InitializeMaze()
 	return true;
 }
 
-void UMIMazeSubsystem::GenerateMaze()
+void UMIMazeEditorSubsystem::GenerateMaze()
 {
 	MazeGenerator->GenerateMaze();
 }
 
-void UMIMazeSubsystem::BuildMaze()
+void UMIMazeEditorSubsystem::BuildMaze()
 {
 	if (MazeBuilder == nullptr)
 	{
@@ -82,10 +82,10 @@ void UMIMazeSubsystem::BuildMaze()
 		World = GEditor->GetEditorWorldContext().World();
 	}
 	
-	MazeBuilder->BuildMaze(MazeGenerator->GetAdjacencyList(), World);
+	MazeBuilder->BuildMaze(MazeGenerator->GetAdjacencyList(),GetWorld());
 }
 
-void UMIMazeSubsystem::DestroyMaze()
+void UMIMazeEditorSubsystem::DestroyMaze()
 {
 	if (MazeBuilder == nullptr)
 	{
@@ -96,7 +96,7 @@ void UMIMazeSubsystem::DestroyMaze()
 }
 
 
-void UMIMazeSubsystem::SetRandomStream(int32 InSeed)
+void UMIMazeEditorSubsystem::SetRandomStream(int32 InSeed)
 {
 	Seed = InSeed;
 	RandomStream = MakeShared<FRandomStream>(InSeed);

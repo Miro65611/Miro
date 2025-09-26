@@ -4,7 +4,7 @@
 #include "Widget/SMIMazeWidget.h"
 #include "SlateOptMacros.h"
 #include "PropertyCustomizationHelpers.h"
-#include "Subsystem/MIMazeSubsystem.h"
+#include "Subsystem/MIMazeEditorSubsystem.h"
 #include "Data/MIMazeGenerationData.h"
 #include "Widget/SMI2DMazeWidget.h"
 #include "Widgets/Input/SNumericEntryBox.h"
@@ -67,7 +67,7 @@ void SMIMazeWidget::Construct(const FArguments& InArgs)
 
 TSharedRef<SWidget> SMIMazeWidget::BuildMazeDataHeader()
 {
-	UMIMazeSubsystem* Subsystem = GEditor->GetEditorSubsystem<UMIMazeSubsystem>();
+	UMIMazeEditorSubsystem* Subsystem = GEditor->GetEditorSubsystem<UMIMazeEditorSubsystem>();
 
 	return SNew(SHorizontalBox)
 		+ SHorizontalBox::Slot()
@@ -105,7 +105,7 @@ TSharedRef<SWidget> SMIMazeWidget::BuildMazeDataHeader()
 
 TSharedRef<SWidget> SMIMazeWidget::BuildMazeGenerateButton()
 {
-	UMIMazeSubsystem* Subsystem = GEditor->GetEditorSubsystem<UMIMazeSubsystem>();
+	UMIMazeEditorSubsystem* Subsystem = GEditor->GetEditorSubsystem<UMIMazeEditorSubsystem>();
 
 	return SNew(SButton)
 		.Text(FText::FromString(TEXT("Generate Maze")))
@@ -128,7 +128,7 @@ TSharedRef<SWidget> SMIMazeWidget::BuildMazeGenerateButton()
 
 TSharedRef<SWidget> SMIMazeWidget::BuildMazeBuildButton()
 {
-	UMIMazeSubsystem* Subsystem = GEditor->GetEditorSubsystem<UMIMazeSubsystem>();
+	UMIMazeEditorSubsystem* Subsystem = GEditor->GetEditorSubsystem<UMIMazeEditorSubsystem>();
 
 	return SNew(SButton)
 		.Text(FText::FromString(TEXT("Build Maze")))
@@ -151,7 +151,7 @@ TSharedRef<SWidget> SMIMazeWidget::BuildSeedInputButton()
 		{
 			if (CommitType == ETextCommit::Type::OnEnter)
 			{
-				UMIMazeSubsystem* Subsystem = GEditor->GetEditorSubsystem<UMIMazeSubsystem>();
+				UMIMazeEditorSubsystem* Subsystem = GEditor->GetEditorSubsystem<UMIMazeEditorSubsystem>();
 				Subsystem->SetRandomStream(Seed);
 			}
 

@@ -6,7 +6,7 @@
 #include "Maze/MIMazeGenerator.h"
 #include "MazeType/MIMazeType.h"
 #include "MazeType/MIRectangularMaze.h"
-#include "Subsystem/MIMazeSubsystem.h"
+#include "Subsystem/MIMazeEditorSubsystem.h"
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
@@ -25,7 +25,7 @@ int32 SMI2DMazeWidget::OnPaint(const FPaintArgs& Args, const FGeometry& Allotted
 	const bool bIsEnabled = ShouldBeEnabled(bParentEnabled);
 	const ESlateDrawEffect DrawEffects = bIsEnabled ? ESlateDrawEffect::None : ESlateDrawEffect::DisabledEffect;
 
-	UMIMazeSubsystem* Subsystem = GEditor->GetEditorSubsystem<UMIMazeSubsystem>();
+	UMIMazeEditorSubsystem* Subsystem = GEditor->GetEditorSubsystem<UMIMazeEditorSubsystem>();
 
 	const FMIGraph& AdjacencyList = Subsystem->GetMazeGenerator()->GetAdjacencyList();
 

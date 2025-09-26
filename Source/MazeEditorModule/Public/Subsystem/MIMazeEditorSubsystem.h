@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "EditorSubsystem.h"
-#include "MIMazeSubsystem.generated.h"
+#include "MIMazeEditorSubsystem.generated.h"
 
 class UMIMazeGenerator;
 class UMIMazeGenerationData;
@@ -14,12 +14,12 @@ class UMIMazeBuilder;
  *  MazeSubsystem
  */
 UCLASS()
-class MAZEEDITORMODULE_API UMIMazeSubsystem : public UEditorSubsystem
+class MAZEEDITORMODULE_API UMIMazeEditorSubsystem : public UEditorSubsystem
 {
 	GENERATED_BODY()
 
 public:
-	UMIMazeSubsystem();
+	UMIMazeEditorSubsystem();
 	
 	// Subsystem Interface
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
