@@ -12,7 +12,7 @@ class UMIMazeGenerator;
 class UMIMazeBuilder;
 class UMIMazeGenerationData;
 
-/**
+  /**
  * Game에서 Maze를 전체적으로 관리하는 매니저
  */
 UCLASS()

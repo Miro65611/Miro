@@ -35,7 +35,7 @@ void UMIMazeBuilder::BuildMaze(const FMIGraph& InAdjacencyList, UWorld* World)
 			}
 			else
 			{
-				UE_LOG(LogTemp, Error, TEXT("Unsupported cell border type!"));
+				UE_LOG(LogTemp, Error, TEXT("Unsupported cell border type!")); 
 			}
 		}
 	}

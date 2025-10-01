@@ -25,7 +25,8 @@ class FMILineBorder : public FMICellBorder
 public:
 	FMILineBorder();
 	FMILineBorder(double InX1, double InY1, double InX2, double InY2);
-
+	FMILineBorder(TTuple<double, double,double,double>);
+	
 	double X1;
 	double Y1;
 	double X2;
